@@ -1,0 +1,10 @@
+**/**/*_test.go
+.dockerignore
+.gitignore
+.git
+Makefile
+build
+.idea
+Dockerfile*
+
+
