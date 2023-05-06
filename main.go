@@ -5,11 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"os"
 	"os/signal"
 	"syscall"
 	"timdevs.rest.api.com/m/v2/controllers"
 	"time"
 )
+
+var port = os.Getenv("PORT")
 
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
@@ -19,7 +22,7 @@ func main() {
 	router.GET("/health", controllers.GetHealth)
 
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + port,
 		Handler: router,
 	}
 
