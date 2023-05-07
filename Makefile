@@ -23,7 +23,7 @@ run_package:
 	docker run -p8443:8443 -e PORT=8443 gin-server
 
 dive:
-	CI=true dive gin-server --ci-config .dive.yaml
+	CI=true dive gin-server --ci-config docker/.dive.yaml
 
 clean:
 	rm -rf build
