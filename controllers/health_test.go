@@ -1,26 +1,32 @@
 package controllers_test
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/goccy/go-json"
-	"github.com/stretchr/testify/assert"
-	"io/ioutil"
+	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
+
 	"timdevs.rest.api.com/m/v2/controllers"
 )
 
-func SetUpRouter() *gin.Engine {
+func setUpRouter() *gin.Engine {
 	router := gin.Default()
 	return router
 }
 
 func TestGetHealthReturns200StatusCode(t *testing.T) {
 	t.Parallel()
-	r := SetUpRouter()
+
+	r := setUpRouter()
 	r.GET("/health", controllers.Health)
-	req, _ := http.NewRequest("GET", "/health", nil)
+
+	req, err := http.NewRequest("GET", "/health", nil)
+	assert.NoError(t, err)
+
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
@@ -29,13 +35,21 @@ func TestGetHealthReturns200StatusCode(t *testing.T) {
 
 func TestGetHealthReturnsStatusOK(t *testing.T) {
 	t.Parallel()
-	expected, _ := json.Marshal(controllers.HealthStatus{Status: "OK"})
-	r := SetUpRouter()
+
+	expected := controllers.HealthStatus{Status: "OK"}
+	expectedJSON, _ := json.Marshal(expected)
+
+	r := setUpRouter()
 	r.GET("/health", controllers.Health)
-	req, _ := http.NewRequest("GET", "/health", nil)
+
+	req, err := http.NewRequest("GET", "/health", nil)
+	assert.NoError(t, err)
+
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	actual, _ := ioutil.ReadAll(w.Body)
-	assert.Equal(t, string(expected), string(actual))
+	actual, err := io.ReadAll(w.Body)
+	assert.NoError(t, err)
+
+	assert.Equal(t, string(expectedJSON), string(actual))
 }
