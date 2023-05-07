@@ -11,7 +11,7 @@ import (
 func RegisterVehicle(c *gin.Context) {
 
 	// Validate inputs against struct tags
-	body, err := validators.RegisterVehicleInput(c)
+	body, err := validators.RegisterVehicleRequest(c)
 
 	if err != nil {
 		c.AbortWithStatusJSON(

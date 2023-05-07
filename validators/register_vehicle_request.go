@@ -19,7 +19,7 @@ type Vehicle struct {
 	LicensePlate string          `json:"license_plate"`
 }
 
-func RegisterVehicleInput(c *gin.Context) (Vehicle, error) {
+func RegisterVehicleRequest(c *gin.Context) (Vehicle, error) {
 	body := Vehicle{}
 	err := c.ShouldBindJSON(&body)
 
