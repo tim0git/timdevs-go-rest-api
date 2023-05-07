@@ -14,12 +14,15 @@ import (
 )
 
 var mockVehicle = controllers.Vehicle{
-	Vin:          1234567890,
+	Vin:          "GB29HP0K456785",
 	Manufacturer: "Tesla",
 	Model:        "Model 3",
 	Year:         2020,
 	Color:        "Red",
-	CapacityKwh:  75,
+	Capacity: controllers.Capacity{
+		Value: 75,
+		Unit:  "kWh",
+	},
 	LicensePlate: "ABC123",
 }
 
@@ -62,7 +65,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
 		Color:        mockVehicle.Color,
-		CapacityKwh:  mockVehicle.CapacityKwh,
+		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
 
@@ -96,7 +99,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenManufacturerIsMissing(t *testi
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
 		Color:        mockVehicle.Color,
-		CapacityKwh:  mockVehicle.CapacityKwh,
+		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
 	request, err := json.Marshal(mockVehicleMissingManufacturer)
@@ -129,7 +132,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 		Manufacturer: mockVehicle.Manufacturer,
 		Year:         mockVehicle.Year,
 		Color:        mockVehicle.Color,
-		CapacityKwh:  mockVehicle.CapacityKwh,
+		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
 	request, err := json.Marshal(mockVehicleMissingModel)
@@ -162,7 +165,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Color:        mockVehicle.Color,
-		CapacityKwh:  mockVehicle.CapacityKwh,
+		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
 	request, err := json.Marshal(mockVehicleMissingYear)
@@ -195,7 +198,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
-		CapacityKwh:  mockVehicle.CapacityKwh,
+		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
 	request, err := json.Marshal(mockVehicleMissingColor)
@@ -210,14 +213,14 @@ func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestRegisterVehicleReturnsValidationErrorWhenCapacityKwhIsMissing(t *testing.T) {
+func TestRegisterVehicleReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	t.Parallel()
 
 	router := setupRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
-		"message": "Key: 'Vehicle.CapacityKwh' Error:Field validation for 'CapacityKwh' failed on the 'required' tag",
+		"message": "Key: 'Vehicle.Capacity.Value' Error:Field validation for 'Value' failed on the 'required' tag\nKey: 'Vehicle.Capacity.Unit' Error:Field validation for 'Unit' failed on the 'required' tag",
 	}
 
 	expected, err := json.Marshal(validationError)
@@ -254,7 +257,7 @@ func TestRegisterVehicleReturns201StatusCodeWhenLicensePlateIsMissing(t *testing
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
 		Color:        mockVehicle.Color,
-		CapacityKwh:  mockVehicle.CapacityKwh,
+		Capacity:     mockVehicle.Capacity,
 	}
 	request, err := json.Marshal(mockVehicleMissingLicensePlate)
 	assert.NoError(t, err)
