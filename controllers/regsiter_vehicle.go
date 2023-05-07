@@ -5,14 +5,19 @@ import (
 	"net/http"
 )
 
+type Capacity struct {
+	Value int    `value:"value" binding:"required"`
+	Unit  string `unit:"unit" binding:"required"`
+}
+
 type Vehicle struct {
-	Vin          int    `vin:"vin" binding:"required"`
-	Manufacturer string `make:"make" binding:"required"`
-	Model        string `model:"manufacturer" binding:"required"`
-	Year         int    `year:"year" binding:"required"`
-	Color        string `color:"color" binding:"required"`
-	CapacityKwh  int    `capacity:"capacity" binding:"required"`
-	LicensePlate string `license_plate:"license_plate"`
+	Vin          string   `vin:"vin" binding:"required"`
+	Manufacturer string   `make:"make" binding:"required"`
+	Model        string   `model:"manufacturer" binding:"required"`
+	Year         int      `year:"year" binding:"required"`
+	Color        string   `color:"color" binding:"required"`
+	Capacity     Capacity `capacity:"capacity" binding:"required"`
+	LicensePlate string   `license_plate:"license_plate"`
 }
 
 func RegisterVehicle(c *gin.Context) {
