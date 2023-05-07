@@ -9,6 +9,6 @@ type HealthStatus struct {
 	Status string `json:"status"`
 }
 
-func GetHealth(c *gin.Context) {
+func Health(c *gin.Context) {
 	c.JSON(http.StatusOK, HealthStatus{Status: "OK"})
 }

@@ -19,7 +19,7 @@ func main() {
 	defer stop()
 
 	router := gin.Default()
-	router.GET("/health", controllers.GetHealth)
+	router.GET("/health", controllers.Health)
 
 	srv := &http.Server{
 		Addr:    ":" + port,

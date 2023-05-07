@@ -19,7 +19,7 @@ func SetUpRouter() *gin.Engine {
 func TestGetHealthReturns200StatusCode(t *testing.T) {
 	t.Parallel()
 	r := SetUpRouter()
-	r.GET("/health", controllers.GetHealth)
+	r.GET("/health", controllers.Health)
 	req, _ := http.NewRequest("GET", "/health", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
@@ -31,7 +31,7 @@ func TestGetHealthReturnsStatusOK(t *testing.T) {
 	t.Parallel()
 	expected, _ := json.Marshal(controllers.HealthStatus{Status: "OK"})
 	r := SetUpRouter()
-	r.GET("/health", controllers.GetHealth)
+	r.GET("/health", controllers.Health)
 	req, _ := http.NewRequest("GET", "/health", nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
