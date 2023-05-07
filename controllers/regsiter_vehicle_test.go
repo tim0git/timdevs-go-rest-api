@@ -13,23 +13,23 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
-	"timdevs.rest.api.com/m/v2/clients"
 	"timdevs.rest.api.com/m/v2/controllers"
+	dynamodb2 "timdevs.rest.api.com/m/v2/database"
+	"timdevs.rest.api.com/m/v2/validators"
 )
 
-var mockVehicle = controllers.Vehicle{
+var mockVehicle = validators.Vehicle{
 	Vin:          "GB29HP0K456785",
 	Manufacturer: "Tesla",
 	Model:        "Model 3",
 	Year:         2020,
 	Color:        "Red",
-	Capacity: controllers.Capacity{
+	Capacity: validators.VehicleCapacity{
 		Value: 75,
 		Unit:  "kWh",
 	},
 	LicensePlate: "ABC123",
 }
-var router *gin.Engine
 
 func TestMain(m *testing.M) {
 	tableName := fmt.Sprintf("Vehicles-%v", random.UniqueId())
@@ -39,7 +39,7 @@ func TestMain(m *testing.M) {
 	_ = os.Setenv("DYNAMODB_ENDPOINT", "http://localhost:8000")
 	_ = os.Setenv("TABLE_NAME", tableName)
 
-	client := clients.DynamoDbClient()
+	client := dynamodb2.Client()
 	_, err := client.CreateTable(&dynamodb.CreateTableInput{
 		TableName: aws.String(tableName),
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{
@@ -109,7 +109,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingVin := controllers.Vehicle{
+	mockVehicleMissingVin := validators.Vehicle{
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
@@ -142,7 +142,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenManufacturerIsMissing(t *testi
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingManufacturer := controllers.Vehicle{
+	mockVehicleMissingManufacturer := validators.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
@@ -174,7 +174,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingModel := controllers.Vehicle{
+	mockVehicleMissingModel := validators.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Year:         mockVehicle.Year,
@@ -206,7 +206,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingYear := controllers.Vehicle{
+	mockVehicleMissingYear := validators.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -238,7 +238,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingColor := controllers.Vehicle{
+	mockVehicleMissingColor := validators.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -270,7 +270,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenCapacityIsMissing(t *testing.T
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingCapacityKwh := controllers.Vehicle{
+	mockVehicleMissingCapacityKwh := validators.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -294,7 +294,7 @@ func TestRegisterVehicleReturns201StatusCodeWhenLicensePlateIsMissing(t *testing
 	t.Parallel()
 	router := setupRouter()
 
-	mockVehicleMissingLicensePlate := controllers.Vehicle{
+	mockVehicleMissingLicensePlate := validators.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,

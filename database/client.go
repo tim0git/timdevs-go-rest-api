@@ -1,4 +1,4 @@
-package clients
+package database
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func DynamoDbClient() *dynamodb.DynamoDB {
+func Client() *dynamodb.DynamoDB {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
