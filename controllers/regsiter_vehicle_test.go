@@ -2,14 +2,18 @@ package controllers_test
 
 import (
 	"bytes"
-	"net/http"
-	"net/http/httptest"
-	"testing"
-
+	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
+	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/stretchr/testify/assert"
-
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"testing"
+	"timdevs.rest.api.com/m/v2/clients"
 	"timdevs.rest.api.com/m/v2/controllers"
 )
 
@@ -25,7 +29,54 @@ var mockVehicle = controllers.Vehicle{
 	},
 	LicensePlate: "ABC123",
 }
+var router *gin.Engine
 
+func TestMain(m *testing.M) {
+	tableName := fmt.Sprintf("Vehicles-%v", random.UniqueId())
+
+	_ = os.Setenv("AWS_ACCESS_KEY_ID", "mock-key")
+	_ = os.Setenv("AWS_SECRET_ACCESS_KEY", "mock-secret")
+	_ = os.Setenv("DYNAMODB_ENDPOINT", "http://localhost:8000")
+	_ = os.Setenv("TABLE_NAME", tableName)
+
+	client := clients.DynamoDbClient()
+	_, err := client.CreateTable(&dynamodb.CreateTableInput{
+		TableName: aws.String(tableName),
+		AttributeDefinitions: []*dynamodb.AttributeDefinition{
+			{
+				AttributeName: aws.String("vin"),
+				AttributeType: aws.String("S"),
+			},
+		},
+		KeySchema: []*dynamodb.KeySchemaElement{
+			{
+				AttributeName: aws.String("vin"),
+				KeyType:       aws.String("HASH"),
+			},
+		},
+		ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
+			ReadCapacityUnits:  aws.Int64(5),
+			WriteCapacityUnits: aws.Int64(5),
+		},
+	})
+	assert.NoError(m, err)
+
+	// Run the tests.
+	exitCode := m.Run()
+
+	// Delete the table after running all the tests.
+	_, err = client.DeleteTable(&dynamodb.DeleteTableInput{
+		TableName: aws.String(tableName),
+	})
+	assert.NoError(m, err)
+
+	_ = os.Setenv("AWS_ACCESS_KEY_ID", "")
+	_ = os.Setenv("AWS_SECRET_ACCESS_KEY", "")
+	_ = os.Setenv("DYNAMODB_ENDPOINT", "")
+	_ = os.Setenv("TABLE_NAME", "")
+
+	os.Exit(exitCode)
+}
 func setupRouter() *gin.Engine {
 	router := gin.Default()
 	router.POST("/vehicle", controllers.RegisterVehicle)
@@ -33,7 +84,6 @@ func setupRouter() *gin.Engine {
 }
 func TestRegisterVehicleReturns201StatusCode(t *testing.T) {
 	t.Parallel()
-
 	router := setupRouter()
 
 	request, err := json.Marshal(&mockVehicle)
@@ -49,7 +99,6 @@ func TestRegisterVehicleReturns201StatusCode(t *testing.T) {
 }
 func TestRegisterVehicleReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	t.Parallel()
-
 	router := setupRouter()
 
 	validationError := gin.H{
@@ -83,7 +132,6 @@ func TestRegisterVehicleReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 }
 func TestRegisterVehicleReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 	t.Parallel()
-
 	router := setupRouter()
 
 	validationError := gin.H{
@@ -116,7 +164,6 @@ func TestRegisterVehicleReturnsValidationErrorWhenManufacturerIsMissing(t *testi
 }
 func TestRegisterVehicleReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	t.Parallel()
-
 	router := setupRouter()
 
 	validationError := gin.H{
@@ -149,7 +196,6 @@ func TestRegisterVehicleReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 }
 func TestRegisterVehicleReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	t.Parallel()
-
 	router := setupRouter()
 
 	validationError := gin.H{
@@ -182,7 +228,6 @@ func TestRegisterVehicleReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 }
 func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	t.Parallel()
-
 	router := setupRouter()
 
 	validationError := gin.H{
@@ -215,7 +260,6 @@ func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 }
 func TestRegisterVehicleReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	t.Parallel()
-
 	router := setupRouter()
 
 	validationError := gin.H{
@@ -248,7 +292,6 @@ func TestRegisterVehicleReturnsValidationErrorWhenCapacityIsMissing(t *testing.T
 }
 func TestRegisterVehicleReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 	t.Parallel()
-
 	router := setupRouter()
 
 	mockVehicleMissingLicensePlate := controllers.Vehicle{
