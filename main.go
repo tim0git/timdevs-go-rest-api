@@ -20,6 +20,7 @@ func main() {
 
 	router := gin.Default()
 	router.GET("/health", controllers.Health)
+	router.POST("/vehicle", controllers.RegisterVehicle)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
@@ -45,3 +46,13 @@ func main() {
 
 	log.Println("Server exited gracefully")
 }
+
+// POST /vehicle
+// GET /vehicle?vin=1234567890
+// PATCH /vehicle?vin=1234567890
+// DELETE /vehicle?vin=1234567890
+
+// POST vehicle/user
+// GET vehicle/user?user_id=1234567890
+// PATCH vehicle/user?user_id=1234567890
+// DELETE vehicle/user?user_id=1234567890
