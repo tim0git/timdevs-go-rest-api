@@ -6,5 +6,5 @@ Makefile
 build
 .idea
 Dockerfile*
-
+compose.yml
 
