@@ -7,8 +7,8 @@ debug:
 coverage:
 	go test -coverprofile=coverage.out ./... ;    go tool cover -html=coverage.out
 
-run_dev:
-	PORT=8443 go run main.go
+run:
+	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" go run main.go
 
 build:
 	go build -ldflags="-w -s" -o build
@@ -20,7 +20,7 @@ package:
 	docker build -t vehicles-api -f Dockerfile .
 
 run_package:
-	docker run -p8443:8443 -e PORT=8443 gin-server
+	docker run -p8443:8443 --env-file .env.local vehicles-api
 
 dive:
 	CI=true dive vehicles-api --ci-config docker/.dive.yaml
