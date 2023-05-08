@@ -68,3 +68,19 @@ func TestPutsItemWithoutError(t *testing.T) {
 	_, err := dynamodb2.PutItem(item)
 	assert.NoError(t, err)
 }
+
+func TestThrowsErrorWhenItemIsNil(t *testing.T) {
+	_, err := dynamodb2.PutItem(nil)
+	assert.Error(t, err)
+}
+
+func TestThrowsErrorWhenItemIsIncorrectlyMarshaled(t *testing.T) {
+	item := map[string]*dynamodb.AttributeValue{
+		"id": {
+			N: aws.String("123"),
+		},
+	}
+
+	_, err := dynamodb2.PutItem(item)
+	assert.Error(t, err)
+}

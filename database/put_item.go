@@ -8,14 +8,14 @@ import (
 
 func PutItem(item map[string]*dynamodb.AttributeValue) (*dynamodb.PutItemOutput, error) {
 	client := Client()
-	_, err := client.PutItem(&dynamodb.PutItemInput{
+	res, err := client.PutItem(&dynamodb.PutItemInput{
 		TableName: aws.String(os.Getenv("TABLE_NAME")),
 		Item:      item,
 	})
 
 	if err != nil {
-		return nil, err
+		return res, err
 	}
 
-	return nil, nil
+	return res, nil
 }

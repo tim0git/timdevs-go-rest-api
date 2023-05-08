@@ -5,7 +5,7 @@ debug:
 	go test -count=1 ./... -v
 
 coverage:
-	go test ./... -cover
+	go test -coverprofile=coverage.out ./... ;    go tool cover -html=coverage.out
 
 run_dev:
 	PORT=8443 go run main.go

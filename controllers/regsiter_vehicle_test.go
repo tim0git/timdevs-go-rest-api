@@ -15,16 +15,15 @@ import (
 	"testing"
 	"timdevs.rest.api.com/m/v2/controllers"
 	dynamodb2 "timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/validators"
 )
 
-var mockVehicle = validators.Vehicle{
+var mockVehicle = controllers.Vehicle{
 	Vin:          "GB29HP0K456785",
 	Manufacturer: "Tesla",
 	Model:        "Model 3",
 	Year:         2020,
 	Color:        "Red",
-	Capacity: validators.VehicleCapacity{
+	Capacity: controllers.VehicleCapacity{
 		Value: 75,
 		Unit:  "kWh",
 	},
@@ -82,22 +81,24 @@ func setupRouter() *gin.Engine {
 	router.POST("/vehicle", controllers.RegisterVehicle)
 	return router
 }
-func TestRegisterVehicleReturns201StatusCode(t *testing.T) {
+
+// Validation
+func TestReturns201StatusCodeWhenAllFieldsArePresent(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
 	request, err := json.Marshal(&mockVehicle)
 	assert.NoError(t, err)
 
-	req, err := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
-	assert.NoError(t, err)
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusCreated, w.Code)
 }
-func TestRegisterVehicleReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
+func TestReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
@@ -109,7 +110,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingVin := validators.Vehicle{
+	mockVehicleMissingVin := controllers.Vehicle{
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
@@ -118,11 +119,11 @@ func TestRegisterVehicleReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 		LicensePlate: mockVehicle.LicensePlate,
 	}
 
-	request, err := json.Marshal(mockVehicleMissingVin)
-	assert.NoError(t, err)
+	request, marshalError := json.Marshal(mockVehicleMissingVin)
+	assert.NoError(t, marshalError)
 
-	req, err := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
-	assert.NoError(t, err)
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -130,7 +131,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestRegisterVehicleReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
+func TestReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
@@ -142,7 +143,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenManufacturerIsMissing(t *testi
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingManufacturer := validators.Vehicle{
+	mockVehicleMissingManufacturer := controllers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
@@ -150,11 +151,11 @@ func TestRegisterVehicleReturnsValidationErrorWhenManufacturerIsMissing(t *testi
 		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
-	request, err := json.Marshal(mockVehicleMissingManufacturer)
-	assert.NoError(t, err)
+	request, marshalError := json.Marshal(mockVehicleMissingManufacturer)
+	assert.NoError(t, marshalError)
 
-	req, err := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
-	assert.NoError(t, err)
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -162,7 +163,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenManufacturerIsMissing(t *testi
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestRegisterVehicleReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
+func TestReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
@@ -174,7 +175,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingModel := validators.Vehicle{
+	mockVehicleMissingModel := controllers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Year:         mockVehicle.Year,
@@ -182,11 +183,11 @@ func TestRegisterVehicleReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
-	request, err := json.Marshal(mockVehicleMissingModel)
-	assert.NoError(t, err)
+	request, marshalError := json.Marshal(mockVehicleMissingModel)
+	assert.NoError(t, marshalError)
 
-	req, err := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
-	assert.NoError(t, err)
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -194,7 +195,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestRegisterVehicleReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
+func TestReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
@@ -206,7 +207,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingYear := validators.Vehicle{
+	mockVehicleMissingYear := controllers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -214,11 +215,11 @@ func TestRegisterVehicleReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
-	request, err := json.Marshal(mockVehicleMissingYear)
-	assert.NoError(t, err)
+	request, marshalError := json.Marshal(mockVehicleMissingYear)
+	assert.NoError(t, marshalError)
 
-	req, err := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
-	assert.NoError(t, err)
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -226,7 +227,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
+func TestReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
@@ -238,7 +239,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingColor := validators.Vehicle{
+	mockVehicleMissingColor := controllers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -246,11 +247,11 @@ func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 		Capacity:     mockVehicle.Capacity,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
-	request, err := json.Marshal(mockVehicleMissingColor)
-	assert.NoError(t, err)
+	request, marshalError := json.Marshal(mockVehicleMissingColor)
+	assert.NoError(t, marshalError)
 
-	req, err := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
-	assert.NoError(t, err)
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -258,7 +259,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestRegisterVehicleReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
+func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
@@ -270,7 +271,7 @@ func TestRegisterVehicleReturnsValidationErrorWhenCapacityIsMissing(t *testing.T
 	expected, err := json.Marshal(validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingCapacityKwh := validators.Vehicle{
+	mockVehicleMissingCapacityKwh := controllers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -278,11 +279,11 @@ func TestRegisterVehicleReturnsValidationErrorWhenCapacityIsMissing(t *testing.T
 		Color:        mockVehicle.Color,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
-	request, err := json.Marshal(mockVehicleMissingCapacityKwh)
-	assert.NoError(t, err)
+	request, marshalError := json.Marshal(mockVehicleMissingCapacityKwh)
+	assert.NoError(t, marshalError)
 
-	req, err := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
-	assert.NoError(t, err)
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -290,11 +291,11 @@ func TestRegisterVehicleReturnsValidationErrorWhenCapacityIsMissing(t *testing.T
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestRegisterVehicleReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
+func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
-	mockVehicleMissingLicensePlate := validators.Vehicle{
+	mockVehicleMissingLicensePlate := controllers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -302,11 +303,11 @@ func TestRegisterVehicleReturns201StatusCodeWhenLicensePlateIsMissing(t *testing
 		Color:        mockVehicle.Color,
 		Capacity:     mockVehicle.Capacity,
 	}
-	request, err := json.Marshal(mockVehicleMissingLicensePlate)
-	assert.NoError(t, err)
+	request, marshalError := json.Marshal(mockVehicleMissingLicensePlate)
+	assert.NoError(t, marshalError)
 
-	req, err := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
-	assert.NoError(t, err)
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
