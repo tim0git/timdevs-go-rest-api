@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
-	dynamodb2 "timdevs.rest.api.com/m/v2/database"
+	"timdevs.rest.api.com/m/v2/database"
 )
 
 func TestMain(m *testing.M) {
@@ -19,7 +19,7 @@ func TestMain(m *testing.M) {
 	_ = os.Setenv("DYNAMODB_ENDPOINT", "http://localhost:8000")
 	_ = os.Setenv("TABLE_NAME", tableName)
 
-	client := dynamodb2.Client()
+	client := database.Client()
 	_, err := client.CreateTable(&dynamodb.CreateTableInput{
 		TableName: aws.String(tableName),
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{
@@ -57,7 +57,6 @@ func TestMain(m *testing.M) {
 
 	os.Exit(exitCode)
 }
-
 func TestPutsItemWithoutError(t *testing.T) {
 	item := map[string]*dynamodb.AttributeValue{
 		"id": {
@@ -65,15 +64,13 @@ func TestPutsItemWithoutError(t *testing.T) {
 		},
 	}
 
-	_, err := dynamodb2.PutItem(item)
+	_, err := database.PutItem(item)
 	assert.NoError(t, err)
 }
-
 func TestThrowsErrorWhenItemIsNil(t *testing.T) {
-	_, err := dynamodb2.PutItem(nil)
+	_, err := database.PutItem(nil)
 	assert.Error(t, err)
 }
-
 func TestThrowsErrorWhenItemIsIncorrectlyMarshaled(t *testing.T) {
 	item := map[string]*dynamodb.AttributeValue{
 		"id": {
@@ -81,6 +78,6 @@ func TestThrowsErrorWhenItemIsIncorrectlyMarshaled(t *testing.T) {
 		},
 	}
 
-	_, err := dynamodb2.PutItem(item)
+	_, err := database.PutItem(item)
 	assert.Error(t, err)
 }
