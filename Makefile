@@ -14,7 +14,7 @@ build:
 	go build -ldflags="-w -s" -o build
 
 run_build:
-	go run ./build
+	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" ./build
 
 package:
 	docker build -t vehicles-api -f Dockerfile .
