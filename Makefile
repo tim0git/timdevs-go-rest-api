@@ -17,13 +17,13 @@ run_build:
 	go run ./build
 
 package:
-	docker build -t gin-server -f Dockerfile .
+	docker build -t vehicles-api -f Dockerfile .
 
 run_package:
 	docker run -p8443:8443 -e PORT=8443 gin-server
 
 dive:
-	CI=true dive gin-server --ci-config docker/.dive.yaml
+	CI=true dive vehicles-api --ci-config docker/.dive.yaml
 
 clean:
 	rm -rf build

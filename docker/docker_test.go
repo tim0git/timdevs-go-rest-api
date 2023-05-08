@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const tag = "gin-server"
+const tag = "vehicles-api"
 
 func removeContainer(t *testing.T, id string) {
 	cmd := shell.Command{
