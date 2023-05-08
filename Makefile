@@ -1,3 +1,6 @@
+start_db:
+	docker run --detach --name dynamodb -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -inMemory
+
 test:
 	go test -count=1 ./...
 
