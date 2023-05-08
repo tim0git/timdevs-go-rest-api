@@ -14,7 +14,7 @@ import (
 	"os"
 	"testing"
 	"timdevs.rest.api.com/m/v2/controllers"
-	dynamodb2 "timdevs.rest.api.com/m/v2/database"
+	"timdevs.rest.api.com/m/v2/database"
 )
 
 var mockVehicle = controllers.Vehicle{
@@ -38,7 +38,7 @@ func TestMain(m *testing.M) {
 	_ = os.Setenv("DYNAMODB_ENDPOINT", "http://localhost:8000")
 	_ = os.Setenv("TABLE_NAME", tableName)
 
-	client := dynamodb2.Client()
+	client := database.Client()
 	_, err := client.CreateTable(&dynamodb.CreateTableInput{
 		TableName: aws.String(tableName),
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{
