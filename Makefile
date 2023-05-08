@@ -23,7 +23,7 @@ package:
 	docker build -t vehicles-api -f Dockerfile .
 
 run_package:
-	docker run -p8443:8443 --env-file .env.local vehicles-api
+	docker run --add-host localhost:host-gateway -p8443:8443 --env-file .env.local vehicles-api
 
 dive:
 	CI=true dive vehicles-api --ci-config docker/.dive.yaml
