@@ -107,7 +107,7 @@ func TestReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 		"message": "Key: 'Vehicle.Vin' Error:Field validation for 'Vin' failed on the 'required' tag",
 	}
 
-	expected, err := json.Marshal(validationError)
+	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
 	mockVehicleMissingVin := controllers.Vehicle{
@@ -140,7 +140,7 @@ func TestReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 		"message": "Key: 'Vehicle.Manufacturer' Error:Field validation for 'Manufacturer' failed on the 'required' tag",
 	}
 
-	expected, err := json.Marshal(validationError)
+	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
 	mockVehicleMissingManufacturer := controllers.Vehicle{
@@ -172,7 +172,7 @@ func TestReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 		"message": "Key: 'Vehicle.Model' Error:Field validation for 'Model' failed on the 'required' tag",
 	}
 
-	expected, err := json.Marshal(validationError)
+	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
 	mockVehicleMissingModel := controllers.Vehicle{
@@ -204,7 +204,7 @@ func TestReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 		"message": "Key: 'Vehicle.Year' Error:Field validation for 'Year' failed on the 'required' tag",
 	}
 
-	expected, err := json.Marshal(validationError)
+	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
 	mockVehicleMissingYear := controllers.Vehicle{
@@ -236,7 +236,7 @@ func TestReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 		"message": "Key: 'Vehicle.Color' Error:Field validation for 'Color' failed on the 'required' tag",
 	}
 
-	expected, err := json.Marshal(validationError)
+	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
 	mockVehicleMissingColor := controllers.Vehicle{
@@ -268,7 +268,7 @@ func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 		"message": "Key: 'Vehicle.Capacity.Value' Error:Field validation for 'Value' failed on the 'required' tag\nKey: 'Vehicle.Capacity.Unit' Error:Field validation for 'Unit' failed on the 'required' tag",
 	}
 
-	expected, err := json.Marshal(validationError)
+	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
 	mockVehicleMissingCapacityKwh := controllers.Vehicle{
@@ -303,7 +303,7 @@ func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 		Color:        mockVehicle.Color,
 		Capacity:     mockVehicle.Capacity,
 	}
-	request, marshalError := json.Marshal(mockVehicleMissingLicensePlate)
+	request, marshalError := json.Marshal(&mockVehicleMissingLicensePlate)
 	assert.NoError(t, marshalError)
 
 	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
