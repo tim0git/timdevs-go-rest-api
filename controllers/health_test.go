@@ -17,7 +17,6 @@ func setUpRouter() *gin.Engine {
 	router := gin.Default()
 	return router
 }
-
 func TestReturns200StatusCode(t *testing.T) {
 	t.Parallel()
 
@@ -32,7 +31,6 @@ func TestReturns200StatusCode(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 }
-
 func TestReturnsStatusOK(t *testing.T) {
 	t.Parallel()
 
