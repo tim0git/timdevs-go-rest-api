@@ -38,6 +38,7 @@ func TestMain(m *testing.M) {
 	_ = os.Setenv("DYNAMODB_ENDPOINT", "http://localhost:8000")
 	_ = os.Setenv("TABLE_NAME", tableName)
 
+	// Create the table before running the tests.
 	client := database.Client()
 	_, err := client.CreateTable(&dynamodb.CreateTableInput{
 		TableName: aws.String(tableName),
@@ -60,6 +61,17 @@ func TestMain(m *testing.M) {
 	})
 	assert.NoError(m, err)
 
+	// Add a duplicate item to the table.
+	_, putItemError := client.PutItem(&dynamodb.PutItemInput{
+		TableName: aws.String(tableName),
+		Item: map[string]*dynamodb.AttributeValue{
+			"vin": {
+				S: aws.String("duplicate-vin"),
+			},
+		},
+	})
+	assert.NoError(m, putItemError)
+
 	// Run the tests.
 	exitCode := m.Run()
 
@@ -81,14 +93,35 @@ func setupRouter() *gin.Engine {
 	router.POST("/vehicle", controllers.RegisterVehicle)
 	return router
 }
-
-// Validation
 func TestReturns201StatusCodeWhenAllFieldsArePresent(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
 	request, err := json.Marshal(&mockVehicle)
 	assert.NoError(t, err)
+
+	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusCreated, w.Code)
+}
+func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
+	t.Parallel()
+	router := setupRouter()
+
+	mockVehicleMissingLicensePlate := controllers.Vehicle{
+		Vin:          fmt.Sprintf(random.UniqueId()),
+		Manufacturer: mockVehicle.Manufacturer,
+		Model:        mockVehicle.Model,
+		Year:         mockVehicle.Year,
+		Color:        mockVehicle.Color,
+		Capacity:     mockVehicle.Capacity,
+	}
+	request, marshalError := json.Marshal(&mockVehicleMissingLicensePlate)
+	assert.NoError(t, marshalError)
 
 	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
 	assert.NoError(t, requestError)
@@ -279,7 +312,7 @@ func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 		Color:        mockVehicle.Color,
 		LicensePlate: mockVehicle.LicensePlate,
 	}
-	request, marshalError := json.Marshal(mockVehicleMissingCapacityKwh)
+	request, marshalError := json.Marshal(&mockVehicleMissingCapacityKwh)
 	assert.NoError(t, marshalError)
 
 	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
@@ -291,20 +324,27 @@ func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
+func TestReturnsDynamoDBErrorWhenAVehicleAlreadyExists(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
-	mockVehicleMissingLicensePlate := controllers.Vehicle{
-		Vin:          mockVehicle.Vin,
+	mockVehicleAlreadyExists := controllers.Vehicle{
+		Vin:          "duplicate-vin",
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
 		Color:        mockVehicle.Color,
 		Capacity:     mockVehicle.Capacity,
 	}
-	request, marshalError := json.Marshal(&mockVehicleMissingLicensePlate)
+	request, marshalError := json.Marshal(&mockVehicleAlreadyExists)
 	assert.NoError(t, marshalError)
+
+	dynamoError := gin.H{
+		"error":   "DYNAMOERR-1",
+		"message": "ConditionalCheckFailedException: The conditional request failed",
+	}
+	expected, err := json.Marshal(&dynamoError)
+	assert.NoError(t, err)
 
 	req, requestError := http.NewRequest("POST", "/vehicle", bytes.NewBuffer(request))
 	assert.NoError(t, requestError)
@@ -312,5 +352,6 @@ func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusCreated, w.Code)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	assert.Equal(t, string(expected), w.Body.String())
 }

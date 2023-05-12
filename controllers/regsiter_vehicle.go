@@ -38,7 +38,7 @@ func RegisterVehicle(c *gin.Context) {
 		return
 	}
 
-	_, putItemError := database.PutItem(item)
+	_, putItemError := database.PutVehicle(item)
 	if putItemError != nil {
 		error.DynamoDBError(c, putItemError)
 		return
