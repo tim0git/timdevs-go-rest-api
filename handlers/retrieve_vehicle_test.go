@@ -14,16 +14,39 @@ func setupRetrieveVehicleRouter() *gin.Engine {
 	router.GET("/vehicle/:vin", handlers.RetrieveVehicle)
 	return router
 }
-
 func TestReturns200StatusCodeWhenVehicleIdIsPassed(t *testing.T) {
 	t.Parallel()
 	router := setupRetrieveVehicleRouter()
 
-	req, requestError := http.NewRequest("GET", "/vehicle/1234567890", nil)
+	req, requestError := http.NewRequest("GET", "/vehicle/GB000000000", nil)
 	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
+}
+func TestReturns404StatusCodeWhenVehicleIdIsNotPassed(t *testing.T) {
+	t.Parallel()
+	router := setupRetrieveVehicleRouter()
+
+	req, requestError := http.NewRequest("GET", "/vehicle/", nil)
+	assert.NoError(t, requestError)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+}
+func TestReturns404StatusCodeWhenVehicleIdIsNotValid(t *testing.T) {
+	t.Parallel()
+	router := setupRetrieveVehicleRouter()
+
+	req, requestError := http.NewRequest("GET", "/vehicle/NotARealVin", nil)
+	assert.NoError(t, requestError)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
 }
