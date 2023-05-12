@@ -18,7 +18,7 @@ func PutVehicle(item map[string]*dynamodb.AttributeValue) (*dynamodb.PutItemOutp
 			"#v": aws.String("vin"),
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":val": &dynamodb.AttributeValue{
+			":val": {
 				S: aws.String(*item["vin"].S),
 			},
 		},
