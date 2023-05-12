@@ -48,4 +48,4 @@ compose_down:
 	docker-compose down
 
 clean:
-	rm -rf build ; docker rm -f dynamodb ; docker rmi timdevs-go-rest-api-vehicle-api:latest ; docker rmi vehicles-api:latest ; docker-compose down ; docker image prune -f
+	rm -rf build ; docker rm -f dynamodb ; docker rmi timdevs-go-rest-api-vehicle-api:latest ; docker rmi vehicles-api:latest ; docker-compose down ; docker image prune -f ; docker builder prune -f;
