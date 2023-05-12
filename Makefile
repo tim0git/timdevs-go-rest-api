@@ -1,3 +1,4 @@
+#Table commands
 start_db:
 	docker run --detach --name dynamodb -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -inMemory
 
@@ -7,6 +8,7 @@ delete_db:
 create_table:
 	aws dynamodb create-table --table-name Vehicles --attribute-definitions AttributeName=vin,AttributeType=S --key-schema AttributeName=vin,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000
 
+#Testing commands
 test: start_db
 	go test -count=1 ./... ; make delete_db
 
@@ -16,26 +18,34 @@ debug: start_db
 coverage: start_db
 	go test -coverprofile=coverage.out ./... ; go tool cover -html=coverage.out ; make delete_db
 
-run:
+integration: compose_up
+	echo "Running integration tests" ; make compose_down ; make clean
+
+#Go binary commands
+dev:
 	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" go run main.go
 
 build:
 	go build -ldflags="-w -s" -o build
 
-run_build:
+run:
 	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" ./build
 
+#Docker commands
 package:
 	docker build -t vehicles-api -f Dockerfile .
 
 run_package:
 	docker run --add-host localhost:host-gateway -p8443:8443 --env-file .env.local vehicles-api
 
-compose:
-	docker-compose up -d && aws dynamodb create-table --table-name Vehicles --attribute-definitions AttributeName=vin,AttributeType=S --key-schema AttributeName=vin,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000
-
 dive:
 	CI=true dive vehicles-api --ci-config docker/.dive.yaml
+
+compose_up:
+	docker-compose up -d && aws dynamodb create-table --table-name Vehicles --attribute-definitions AttributeName=vin,AttributeType=S --key-schema AttributeName=vin,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000
+
+compose_down:
+	docker-compose down
 
 clean:
 	rm -rf build ; docker rm -f dynamodb ; docker rmi timdevs-go-rest-api-vehicle-api:latest ; docker rmi vehicles-api:latest ; docker-compose down ; docker image prune -f
