@@ -42,6 +42,17 @@ func TestMain(m *testing.M) {
 	})
 	assert.NoError(m, err)
 
+	// Add an item to the table.
+	_, putItemError := client.PutItem(&dynamodb.PutItemInput{
+		TableName: aws.String(tableName),
+		Item: map[string]*dynamodb.AttributeValue{
+			"vin": {
+				S: aws.String("GB000000000"),
+			},
+		},
+	})
+	assert.NoError(m, putItemError)
+
 	// Run the tests.
 	exitCode := m.Run()
 

@@ -10,7 +10,7 @@ import (
 func PutVehicle(item map[string]*dynamodb.AttributeValue) (*dynamodb.PutItemOutput, error) {
 	client := database.DynamoDB()
 
-	res, err := client.PutItem(&dynamodb.PutItemInput{
+	putRequest := &dynamodb.PutItemInput{
 		TableName:           aws.String(os.Getenv("TABLE_NAME")),
 		Item:                item,
 		ConditionExpression: aws.String(`attribute_not_exists(vin) OR (#v <> :val AND attribute_exists(vin))`),
@@ -22,11 +22,7 @@ func PutVehicle(item map[string]*dynamodb.AttributeValue) (*dynamodb.PutItemOutp
 				S: aws.String(*item["vin"].S),
 			},
 		},
-	})
-
-	if err != nil {
-		return res, err
 	}
 
-	return res, nil
+	return client.PutItem(putRequest)
 }
