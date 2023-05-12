@@ -10,9 +10,3 @@ func ValidationError(c *gin.Context, err error) {
 		http.StatusBadRequest,
 		gin.H{"error": "VALIDATEERR-1", "message": err.Error()})
 }
-
-func DynamoDBError(c *gin.Context, err error) {
-	c.AbortWithStatusJSON(
-		http.StatusInternalServerError,
-		gin.H{"error": "DYNAMOERR-1", "message": err.Error()})
-}
