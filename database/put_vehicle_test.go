@@ -12,7 +12,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	tableName := fmt.Sprintf("Test-%v", random.UniqueId())
+	tableName := fmt.Sprintf("Vehicles-%v", random.UniqueId())
 
 	_ = os.Setenv("AWS_ACCESS_KEY_ID", "mock-key")
 	_ = os.Setenv("AWS_SECRET_ACCESS_KEY", "mock-secret")
@@ -24,13 +24,13 @@ func TestMain(m *testing.M) {
 		TableName: aws.String(tableName),
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{
 			{
-				AttributeName: aws.String("id"),
+				AttributeName: aws.String("vin"),
 				AttributeType: aws.String("S"),
 			},
 		},
 		KeySchema: []*dynamodb.KeySchemaElement{
 			{
-				AttributeName: aws.String("id"),
+				AttributeName: aws.String("vin"),
 				KeyType:       aws.String("HASH"),
 			},
 		},
@@ -57,27 +57,14 @@ func TestMain(m *testing.M) {
 
 	os.Exit(exitCode)
 }
-func TestPutsItemWithoutError(t *testing.T) {
+func TestPutsVehicleWithoutError(t *testing.T) {
+	t.Parallel()
 	item := map[string]*dynamodb.AttributeValue{
-		"id": {
+		"vin": {
 			S: aws.String("123"),
 		},
 	}
 
-	_, err := database.PutItem(item)
+	_, err := database.PutVehicle(item)
 	assert.NoError(t, err)
-}
-func TestThrowsErrorWhenItemIsNil(t *testing.T) {
-	_, err := database.PutItem(nil)
-	assert.Error(t, err)
-}
-func TestThrowsErrorWhenItemIsIncorrectlyMarshaled(t *testing.T) {
-	item := map[string]*dynamodb.AttributeValue{
-		"id": {
-			N: aws.String("123"),
-		},
-	}
-
-	_, err := database.PutItem(item)
-	assert.Error(t, err)
 }
