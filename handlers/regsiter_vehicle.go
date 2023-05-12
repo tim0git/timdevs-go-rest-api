@@ -24,25 +24,25 @@ type Vehicle struct {
 }
 
 func RegisterVehicle(c *gin.Context) {
-	body := Vehicle{}
+	vehicle := Vehicle{}
 
-	validationError := c.ShouldBindJSON(&body)
+	validationError := c.ShouldBindJSON(&vehicle)
 	if validationError != nil {
 		error.ValidationError(c, validationError)
 		return
 	}
 
-	item, marshalError := dynamodbattribute.MarshalMap(body)
+	marshalledVehicle, marshalError := dynamodbattribute.MarshalMap(&vehicle)
 	if marshalError != nil {
 		error.DynamoDBError(c, marshalError)
 		return
 	}
 
-	_, putItemError := modal.PutVehicle(item)
+	_, putItemError := modal.PutVehicle(marshalledVehicle)
 	if putItemError != nil {
 		error.DynamoDBError(c, putItemError)
 		return
 	}
 
-	c.JSON(http.StatusCreated, &body)
+	c.JSON(http.StatusCreated, nil)
 }
