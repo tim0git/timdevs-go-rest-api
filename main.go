@@ -8,7 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"timdevs.rest.api.com/m/v2/controllers"
+	"timdevs.rest.api.com/m/v2/handlers"
 	"time"
 )
 
@@ -19,8 +19,9 @@ func main() {
 	defer stop()
 
 	router := gin.Default()
-	router.GET("/health", controllers.Health)
-	router.POST("/vehicle", controllers.RegisterVehicle)
+	router.GET("/health", handlers.Health)
+	router.POST("/vehicle", handlers.RegisterVehicle)
+	router.GET("/vehicle/:vin", handlers.RetrieveVehicle)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
@@ -48,11 +49,11 @@ func main() {
 }
 
 // POST /vehicle
-// GET /vehicle?vin=1234567890
-// PATCH /vehicle?vin=1234567890
-// DELETE /vehicle?vin=1234567890
+// GET /vehicle/1234567890
+// PATCH /vehicle/1234567890
+// DELETE /vehicle/1234567890
 
 // POST vehicle/user
-// GET vehicle/user?user_id=1234567890
-// PATCH vehicle/user?user_id=1234567890
-// DELETE vehicle/user?user_id=1234567890
+// GET vehicle/user/1234567890
+// PATCH vehicle/user/1234567890
+// DELETE vehicle/user/1234567890
