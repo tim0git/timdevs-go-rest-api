@@ -39,7 +39,7 @@ func TestMain(m *testing.M) {
 	_ = os.Setenv("TABLE_NAME", tableName)
 
 	// Create the table before running the tests.
-	client := database.Client()
+	client := database.DynamoDB()
 	_, err := client.CreateTable(&dynamodb.CreateTableInput{
 		TableName: aws.String(tableName),
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{

@@ -1,4 +1,4 @@
-package database_test
+package modal_test
 
 import (
 	"fmt"
@@ -9,6 +9,7 @@ import (
 	"os"
 	"testing"
 	"timdevs.rest.api.com/m/v2/database"
+	"timdevs.rest.api.com/m/v2/modal"
 )
 
 func TestMain(m *testing.M) {
@@ -19,7 +20,7 @@ func TestMain(m *testing.M) {
 	_ = os.Setenv("DYNAMODB_ENDPOINT", "http://localhost:8000")
 	_ = os.Setenv("TABLE_NAME", tableName)
 
-	client := database.Client()
+	client := database.DynamoDB()
 	_, err := client.CreateTable(&dynamodb.CreateTableInput{
 		TableName: aws.String(tableName),
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{
@@ -65,6 +66,6 @@ func TestPutsVehicleWithoutError(t *testing.T) {
 		},
 	}
 
-	_, err := database.PutVehicle(item)
+	_, err := modal.PutVehicle(item)
 	assert.NoError(t, err)
 }

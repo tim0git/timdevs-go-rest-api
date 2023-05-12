@@ -4,8 +4,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"timdevs.rest.api.com/m/v2/database"
 	"timdevs.rest.api.com/m/v2/error"
+	"timdevs.rest.api.com/m/v2/modal"
 )
 
 type VehicleCapacity struct {
@@ -38,7 +38,7 @@ func RegisterVehicle(c *gin.Context) {
 		return
 	}
 
-	_, putItemError := database.PutVehicle(item)
+	_, putItemError := modal.PutVehicle(item)
 	if putItemError != nil {
 		error.DynamoDBError(c, putItemError)
 		return

@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func Client() *dynamodb.DynamoDB {
+func DynamoDB() *dynamodb.DynamoDB {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
