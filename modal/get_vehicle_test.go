@@ -11,7 +11,6 @@ func TestGetsVehicleWithoutError(t *testing.T) {
 	_, err := modal.GetVehicle("GB000000000")
 	assert.NoError(t, err)
 }
-
 func TestGetsVehicleWithCorrectVin(t *testing.T) {
 	t.Parallel()
 	res, _ := modal.GetVehicle("GB000000000")
