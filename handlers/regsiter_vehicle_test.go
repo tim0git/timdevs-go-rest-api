@@ -61,12 +61,12 @@ func TestMain(m *testing.M) {
 	})
 	assert.NoError(m, err)
 
-	// Add a duplicate item to the table.
+	// Add an item to the table.
 	_, putItemError := client.PutItem(&dynamodb.PutItemInput{
 		TableName: aws.String(tableName),
 		Item: map[string]*dynamodb.AttributeValue{
 			"vin": {
-				S: aws.String("duplicate-vin"),
+				S: aws.String("GB000000000"),
 			},
 		},
 	})
@@ -329,7 +329,7 @@ func TestReturnsDynamoDBErrorWhenAVehicleAlreadyExists(t *testing.T) {
 	router := setupRegisterVehicleRouter()
 
 	mockVehicleAlreadyExists := handlers.Vehicle{
-		Vin:          "duplicate-vin",
+		Vin:          "GB000000000",
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
