@@ -1,4 +1,4 @@
-package controllers_test
+package handlers_test
 
 import (
 	"bytes"
@@ -13,17 +13,17 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
-	"timdevs.rest.api.com/m/v2/controllers"
 	"timdevs.rest.api.com/m/v2/database"
+	"timdevs.rest.api.com/m/v2/handlers"
 )
 
-var mockVehicle = controllers.Vehicle{
+var mockVehicle = handlers.Vehicle{
 	Vin:          "GB29HP0K456785",
 	Manufacturer: "Tesla",
 	Model:        "Model 3",
 	Year:         2020,
 	Color:        "Red",
-	Capacity: controllers.VehicleCapacity{
+	Capacity: handlers.VehicleCapacity{
 		Value: 75,
 		Unit:  "kWh",
 	},
@@ -88,14 +88,14 @@ func TestMain(m *testing.M) {
 
 	os.Exit(exitCode)
 }
-func setupRouter() *gin.Engine {
+func setupRegisterVehicleRouter() *gin.Engine {
 	router := gin.Default()
-	router.POST("/vehicle", controllers.RegisterVehicle)
+	router.POST("/vehicle", handlers.RegisterVehicle)
 	return router
 }
 func TestReturns201StatusCodeWhenAllFieldsArePresent(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
 	request, err := json.Marshal(&mockVehicle)
 	assert.NoError(t, err)
@@ -110,9 +110,9 @@ func TestReturns201StatusCodeWhenAllFieldsArePresent(t *testing.T) {
 }
 func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
-	mockVehicleMissingLicensePlate := controllers.Vehicle{
+	mockVehicleMissingLicensePlate := handlers.Vehicle{
 		Vin:          fmt.Sprintf(random.UniqueId()),
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -133,7 +133,7 @@ func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -143,7 +143,7 @@ func TestReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingVin := controllers.Vehicle{
+	mockVehicleMissingVin := handlers.Vehicle{
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
@@ -166,7 +166,7 @@ func TestReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -176,7 +176,7 @@ func TestReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingManufacturer := controllers.Vehicle{
+	mockVehicleMissingManufacturer := handlers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
@@ -198,7 +198,7 @@ func TestReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -208,7 +208,7 @@ func TestReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingModel := controllers.Vehicle{
+	mockVehicleMissingModel := handlers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Year:         mockVehicle.Year,
@@ -230,7 +230,7 @@ func TestReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -240,7 +240,7 @@ func TestReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingYear := controllers.Vehicle{
+	mockVehicleMissingYear := handlers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -262,7 +262,7 @@ func TestReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -272,7 +272,7 @@ func TestReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingColor := controllers.Vehicle{
+	mockVehicleMissingColor := handlers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -294,7 +294,7 @@ func TestReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -304,7 +304,7 @@ func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingCapacityKwh := controllers.Vehicle{
+	mockVehicleMissingCapacityKwh := handlers.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -326,9 +326,9 @@ func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 }
 func TestReturnsDynamoDBErrorWhenAVehicleAlreadyExists(t *testing.T) {
 	t.Parallel()
-	router := setupRouter()
+	router := setupRegisterVehicleRouter()
 
-	mockVehicleAlreadyExists := controllers.Vehicle{
+	mockVehicleAlreadyExists := handlers.Vehicle{
 		Vin:          "duplicate-vin",
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
