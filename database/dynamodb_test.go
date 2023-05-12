@@ -10,23 +10,23 @@ import (
 var mockRegion string = "us-east-1"
 var mockEndpoint string = "http://localhost:8000"
 
-func TestReturnsDynamoDbClient(t *testing.T) {
+func TestReturnsDynamoDBClient(t *testing.T) {
 	t.Parallel()
 	actual := database.DynamoDB()
 	assert.NotNil(t, actual)
 }
-func TestReturnsDynamoDbClientWithConfig(t *testing.T) {
+func TestReturnsDynamoDBClientWithConfig(t *testing.T) {
 	t.Parallel()
 	actual := database.DynamoDB()
 	assert.NotNil(t, actual.Config)
 }
-func TestReturnsDynamoDbClientWithRegion(t *testing.T) {
+func TestReturnsDynamoDBClientWithRegion(t *testing.T) {
 	t.Parallel()
 	_ = os.Setenv("AWS_REGION", mockRegion)
 	actual := database.DynamoDB()
 	assert.Equal(t, mockRegion, *actual.Config.Region)
 }
-func TestReturnsDynamoDbClientWithEndpoint(t *testing.T) {
+func TestReturnsDynamoDBClientWithEndpoint(t *testing.T) {
 	t.Parallel()
 	err := os.Setenv("DYNAMODB_ENDPOINT", mockEndpoint)
 

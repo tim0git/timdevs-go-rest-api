@@ -3,7 +3,6 @@ package modal
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"log"
 	"os"
 	"timdevs.rest.api.com/m/v2/database"
 )
@@ -26,7 +25,6 @@ func PutVehicle(item map[string]*dynamodb.AttributeValue) (*dynamodb.PutItemOutp
 	})
 
 	if err != nil {
-		log.Println(err)
 		return res, err
 	}
 
