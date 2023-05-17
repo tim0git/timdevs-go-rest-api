@@ -22,6 +22,7 @@ func main() {
 	router.GET("/health", handlers.Health)
 	router.POST("/vehicle", handlers.RegisterVehicle)
 	router.GET("/vehicle/:vin", handlers.RetrieveVehicle)
+	router.PATCH("/vehicle/:vin", handlers.UpdateVehicle)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
@@ -52,8 +53,3 @@ func main() {
 // GET /vehicle/1234567890
 // PATCH /vehicle/1234567890
 // DELETE /vehicle/1234567890
-
-// POST vehicle/user
-// GET vehicle/user/1234567890
-// PATCH vehicle/user/1234567890
-// DELETE vehicle/user/1234567890
