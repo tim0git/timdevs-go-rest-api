@@ -40,7 +40,7 @@ func TestMain(m *testing.M) {
 
 	// Create the table before running the tests.
 	client := database.DynamoDB()
-	_, err := client.CreateTable(&dynamodb.CreateTableInput{
+	_, createTableError := client.CreateTable(&dynamodb.CreateTableInput{
 		TableName: aws.String(tableName),
 		AttributeDefinitions: []*dynamodb.AttributeDefinition{
 			{
@@ -59,7 +59,9 @@ func TestMain(m *testing.M) {
 			WriteCapacityUnits: aws.Int64(5),
 		},
 	})
-	assert.NoError(m, err)
+	if createTableError != nil {
+		panic(createTableError)
+	}
 
 	// Add an item to the table.
 	_, putItemError := client.PutItem(&dynamodb.PutItemInput{
@@ -70,16 +72,20 @@ func TestMain(m *testing.M) {
 			},
 		},
 	})
-	assert.NoError(m, putItemError)
+	if putItemError != nil {
+		panic(putItemError)
+	}
 
 	// Run the tests.
 	exitCode := m.Run()
 
 	// Delete the table after running all the tests.
-	_, err = client.DeleteTable(&dynamodb.DeleteTableInput{
+	_, deleteTableError := client.DeleteTable(&dynamodb.DeleteTableInput{
 		TableName: aws.String(tableName),
 	})
-	assert.NoError(m, err)
+	if deleteTableError != nil {
+		panic(deleteTableError)
+	}
 
 	_ = os.Setenv("AWS_ACCESS_KEY_ID", "")
 	_ = os.Setenv("AWS_SECRET_ACCESS_KEY", "")
