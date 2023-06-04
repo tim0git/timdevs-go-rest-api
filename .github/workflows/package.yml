@@ -9,5 +9,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Package Application
         run: make package
-      - name: Analyze Container Efficiency
-        run: make dive
+      - name: Dive
+        uses: yuichielectric/dive-action@0.0.4
+        with:
+          image: "vehicles-api:latest"
+          config-file: ${{ github.workspace }}/docker/.dive.yaml
+          github-token: ${{ secrets.GITHUB_TOKEN }}
