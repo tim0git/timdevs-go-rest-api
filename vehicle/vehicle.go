@@ -21,5 +21,5 @@ type Update struct {
 	Year         int      `json:"year" binding:"required"`
 	Color        string   `json:"color" binding:"required"`
 	Capacity     Capacity `json:"capacity" binding:"required"`
-	LicensePlate string   `json:"license_plate"`
+	LicensePlate string   `json:"license_plate" binding:"required"`
 }
