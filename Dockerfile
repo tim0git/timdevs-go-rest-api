@@ -18,7 +18,7 @@ FROM scratch
 
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group /etc/group
-COPY --from=builder --chown=app:app /server /server
+COPY --from=builder /server /server
 
 USER app:golang
 
