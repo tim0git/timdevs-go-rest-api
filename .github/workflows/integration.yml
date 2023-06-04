@@ -9,12 +9,6 @@ jobs:
       matrix:
         go-version: ['1.20.4']
     env:
-      PORT: '${{ secrets.PORT }}'
-      TABLE_NAME: '${{ secrets.TABLE_NAME }}'
-      DYNAMODB_ENDPOINT: '${{ secrets.DYNAMODB_ENDPOINT }}'
-      GIN_MODE: '${{ secrets.GIN_MODE }}'
-      AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-      AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
       POSTMAN_COLLECTION_API_KEY: '${{ secrets.POSTMAN_COLLECTION_API_KEY }}'
 
     steps:

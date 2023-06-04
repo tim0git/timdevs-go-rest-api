@@ -12,6 +12,6 @@ jobs:
       - name: Dive
         uses: yuichielectric/dive-action@0.0.4
         with:
-          image: "vehicles-api:latest"
+          image: "vehicles-api"
           config-file: ${{ github.workspace }}/docker/.dive.yaml
           github-token: ${{ secrets.GITHUB_TOKEN }}
