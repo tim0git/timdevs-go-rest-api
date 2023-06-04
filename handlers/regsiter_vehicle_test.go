@@ -15,15 +15,16 @@ import (
 	"testing"
 	"timdevs.rest.api.com/m/v2/database"
 	"timdevs.rest.api.com/m/v2/handlers"
+	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
-var mockVehicle = handlers.Vehicle{
+var mockVehicle = vehicle.Vehicle{
 	Vin:          "GB29HP0K456785",
 	Manufacturer: "Tesla",
 	Model:        "Model 3",
 	Year:         2020,
 	Color:        "Red",
-	Capacity: handlers.VehicleCapacity{
+	Capacity: vehicle.Capacity{
 		Value: 75,
 		Unit:  "kWh",
 	},
@@ -118,7 +119,7 @@ func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 	t.Parallel()
 	router := setupRegisterVehicleRouter()
 
-	mockVehicleMissingLicensePlate := handlers.Vehicle{
+	mockVehicleMissingLicensePlate := vehicle.Vehicle{
 		Vin:          fmt.Sprintf(random.UniqueId()),
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -149,7 +150,7 @@ func TestReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingVin := handlers.Vehicle{
+	mockVehicleMissingVin := vehicle.Vehicle{
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
@@ -182,7 +183,7 @@ func TestReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingManufacturer := handlers.Vehicle{
+	mockVehicleMissingManufacturer := vehicle.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
@@ -214,7 +215,7 @@ func TestReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingModel := handlers.Vehicle{
+	mockVehicleMissingModel := vehicle.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Year:         mockVehicle.Year,
@@ -246,7 +247,7 @@ func TestReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingYear := handlers.Vehicle{
+	mockVehicleMissingYear := vehicle.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -278,7 +279,7 @@ func TestReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingColor := handlers.Vehicle{
+	mockVehicleMissingColor := vehicle.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -310,7 +311,7 @@ func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	expected, err := json.Marshal(&validationError)
 	assert.NoError(t, err)
 
-	mockVehicleMissingCapacityKwh := handlers.Vehicle{
+	mockVehicleMissingCapacityKwh := vehicle.Vehicle{
 		Vin:          mockVehicle.Vin,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
@@ -334,7 +335,7 @@ func TestReturnsDynamoDBErrorWhenAVehicleAlreadyExists(t *testing.T) {
 	t.Parallel()
 	router := setupRegisterVehicleRouter()
 
-	mockVehicleAlreadyExists := handlers.Vehicle{
+	mockVehicleAlreadyExists := vehicle.Vehicle{
 		Vin:          "GB000000000",
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
