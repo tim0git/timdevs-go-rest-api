@@ -51,11 +51,11 @@ func UpdateVehicle(vehicle vehicle.Update, vin string) (*dynamodb.UpdateItemOutp
 	}
 
 	input.ExpressionAttributeNames = map[string]*string{
-		"#model":           aws.String("Model"),
-		"#year":            aws.String("Year"),
-		"#color":           aws.String("Color"),
-		"#batteryCapacity": aws.String("Capacity"),
-		"#manufacturer":    aws.String("Manufacturer"),
+		"#model":           aws.String("model"),
+		"#year":            aws.String("year"),
+		"#color":           aws.String("color"),
+		"#batteryCapacity": aws.String("capacity"),
+		"#manufacturer":    aws.String("manufacturer"),
 	}
 
 	return client.UpdateItem(input)
