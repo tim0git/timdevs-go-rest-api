@@ -19,7 +19,7 @@ coverage: start_db
 	go test -coverprofile=coverage.out ./... ; go tool cover -html=coverage.out ; make delete_db
 
 integration: compose_up
-	echo "Running integration tests" ; make compose_down ; make clean
+	make newman ; make compose_down ; make clean
 
 #Go binary commands
 dev:
@@ -42,10 +42,13 @@ dive:
 	CI=true dive vehicles-api --ci-config docker/.dive.yaml
 
 compose_up:
-	docker-compose up -d && aws dynamodb create-table --table-name Vehicles --attribute-definitions AttributeName=vin,AttributeType=S --key-schema AttributeName=vin,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000
+	docker-compose up -d && aws dynamodb create-table --table-name Vehicles --attribute-definitions AttributeName=vin,AttributeType=S --key-schema AttributeName=vin,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000 2>&1 > /dev/null
 
 compose_down:
 	docker-compose down
 
 clean:
 	rm -rf build ; docker rm -f dynamodb ; docker rmi timdevs-go-rest-api-vehicle-api:latest ; docker rmi vehicles-api:latest ; docker-compose down ; docker image prune -f ; docker builder prune -f;
+
+newman:
+	docker run --rm --network host -t postman/newman run https://api.postman.com/collections/12717734-83accfac-9b69-47e1-8cd8-59e7179da108?access_key=$POSTMAN_COLLECTION_API_KEY
