@@ -42,7 +42,7 @@ dive:
 	CI=true dive vehicles-api --ci-config docker/.dive.yaml
 
 compose_up:
-	docker-compose up -d && aws dynamodb create-table --table-name Vehicles --attribute-definitions AttributeName=vin,AttributeType=S --key-schema AttributeName=vin,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000 2>&1 > /dev/null
+	docker-compose up -d && aws dynamodb create-table --table-name Vehicles --attribute-definitions AttributeName=vin,AttributeType=S --key-schema AttributeName=vin,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000 --region us-east-1 2>&1 > /dev/null
 
 compose_down:
 	docker-compose down
