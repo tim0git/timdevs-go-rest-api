@@ -9,9 +9,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Package Application
         run: make package
-      - name: Dive
-        uses: yuichielectric/dive-action@0.0.4
-        with:
-          image: "vehicles-api"
-          config-file: ${{ github.workspace }}/docker/.dive.yaml
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Dive
+        run: wget https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb && sudo apt install ./dive_0.9.2_linux_amd64.deb
+      - name: Analyze Docker Image
+        run: make dive
