@@ -12,7 +12,7 @@ import (
 func UpdateVehicle(vehicle vehicle.Update, vin string) (*dynamodb.UpdateItemOutput, error) {
 	client := database.DynamoDB()
 
-	input := &dynamodb.UpdateItemInput{
+	updateRequest := &dynamodb.UpdateItemInput{
 		TableName: aws.String(os.Getenv("TABLE_NAME")),
 		Key: map[string]*dynamodb.AttributeValue{
 			"vin": {
@@ -21,11 +21,11 @@ func UpdateVehicle(vehicle vehicle.Update, vin string) (*dynamodb.UpdateItemOutp
 		},
 	}
 
-	expr := "set #manufacturer = :manufacturer, #model = :model, #year = :year, #color = :color, #batteryCapacity = :batteryCapacity"
+	updateRequest.ConditionExpression = aws.String(`attribute_exists(vin)`)
 
-	input.UpdateExpression = aws.String(expr)
+	updateRequest.UpdateExpression = aws.String("set #manufacturer = :manufacturer, #model = :model, #year = :year, #color = :color, #batteryCapacity = :batteryCapacity")
 
-	input.ExpressionAttributeValues = map[string]*dynamodb.AttributeValue{
+	updateRequest.ExpressionAttributeValues = map[string]*dynamodb.AttributeValue{
 		":manufacturer": {
 			S: aws.String(vehicle.Manufacturer),
 		},
@@ -50,7 +50,7 @@ func UpdateVehicle(vehicle vehicle.Update, vin string) (*dynamodb.UpdateItemOutp
 		},
 	}
 
-	input.ExpressionAttributeNames = map[string]*string{
+	updateRequest.ExpressionAttributeNames = map[string]*string{
 		"#model":           aws.String("model"),
 		"#year":            aws.String("year"),
 		"#color":           aws.String("color"),
@@ -58,5 +58,5 @@ func UpdateVehicle(vehicle vehicle.Update, vin string) (*dynamodb.UpdateItemOutp
 		"#manufacturer":    aws.String("manufacturer"),
 	}
 
-	return client.UpdateItem(input)
+	return client.UpdateItem(updateRequest)
 }
