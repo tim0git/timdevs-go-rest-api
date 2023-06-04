@@ -1,0 +1,13 @@
+name: Unit Tests
+
+on: [push]
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Package Application
+        run: make package
+      - name: Analyze Container Efficiency
+        run: make dive
