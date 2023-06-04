@@ -1,9 +1,10 @@
-name: Unit Tests
+name: Integration Tests
 
 on: [push]
 
 jobs:
-  test:
+  build:
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,7 +16,7 @@ jobs:
       GIN_MODE: '${{ secrets.GIN_MODE }}'
       AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
       AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-      AWS_REGION: '${{ secrets.AWS_REGION }}'
+      POSTMAN_COLLECTION_API_KEY: '${{ secrets.POSTMAN_COLLECTION_API_KEY }}'
 
     steps:
       - uses: actions/checkout@v3
@@ -23,16 +24,5 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
-      - name: Install dependencies
-        run: go get .
-      - name: Start Database
-        run: make start_db
-      - name: Test with Go
-        run: go test ./... -json > TestResults-${{ matrix.go-version }}.json
-      - name: Delete Database
-        run: make delete_db
-      - name: Upload Go test results
-        uses: actions/upload-artifact@v3
-        with:
-          name: Go-results-${{ matrix.go-version }}
-          path: TestResults-${{ matrix.go-version }}.json
+      - name: Run newman integration tests
+        run: make integration
