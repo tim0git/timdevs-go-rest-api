@@ -48,8 +48,3 @@ func main() {
 
 	log.Println("Server exited gracefully")
 }
-
-// POST /vehicle
-// GET /vehicle/1234567890
-// PATCH /vehicle/1234567890
-// DELETE /vehicle/1234567890
