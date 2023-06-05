@@ -51,4 +51,4 @@ clean:
 	rm -rf build ; docker rm -f dynamodb ; docker rmi timdevs-go-rest-api-vehicle-api:latest ; docker rmi vehicles-api:latest ; docker-compose down ; docker image prune -f ; docker builder prune -f;
 
 newman:
-	docker run --rm --network host -t postman/newman run https://api.postman.com/collections/12717734-83accfac-9b69-47e1-8cd8-59e7179da108?access_key=$POSTMAN_COLLECTION_API_KEY
+	docker run --rm --network host -t postman/newman run https://api.postman.com/collections/12717734-83accfac-9b69-47e1-8cd8-59e7179da108?access_key=${POSTMAN_COLLECTION_API_KEY}
