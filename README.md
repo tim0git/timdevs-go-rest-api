@@ -2,6 +2,26 @@
 
 This repository contains the code for a RESTful API for managing vehicle information.
 
+## API Endpoints
+
+### The Vehicle API exposes the following endpoints:
+
+    GET /health: Returns the status of the service.
+
+    GET /swagger/*any: Serves the Swagger UI for API documentation.
+
+    POST /vehicle: Registers a new vehicle.
+
+    GET /vehicle/:vin: Retrieves a specific vehicle based on its Vehicle Identification Number (VIN).
+
+    PATCH /vehicle/:vin: Updates an existing vehicle based on its VIN.
+
+## Graceful Shutdown
+
+The server gracefully handles shutdown signals (SIGINT and SIGTERM). When the server receives a shutdown signal, it initiates the graceful shutdown process.
+
+During shutdown, the server stops accepting new requests and waits for the ongoing requests to complete. If the process exceeds the predefined timeout period (5 seconds in this case), the server is forced to shut down.
+
 ## Dependencies
 
 - Docker 20.10.7
@@ -242,3 +262,13 @@ Note: The API produces responses in application/json format.
 Running the API
 
 After following the setup instructions to start the application locally, you can access the API endpoints using the specified base path and host.
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
+## License
+
+This project is licensed under the MIT License.
+## Acknowledgments
+
+Special thanks to the authors and contributors of the Gin and Swagger packages for their valuable contributions.
