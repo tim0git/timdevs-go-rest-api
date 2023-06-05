@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -31,6 +32,7 @@ func main() {
 	defer stop()
 
 	router := gin.Default()
+	router.Use(gzip.Gzip(gzip.BestSpeed))
 	router.GET("/health", handlers.Health)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.POST("/vehicle", handlers.RegisterVehicle)
