@@ -9,6 +9,16 @@ import (
 	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
+// RetrieveVehicle godoc
+// @Summary retrieve a vehicle
+// @Schemes
+// @Description retrieve a vehicle
+// @Tags vehicle
+// @Accept json
+// @Produce json
+// @Param vin path string true "Vehicle identification number"
+// @Success 200 {object} vehicle.Vehicle
+// @Router /vehicle/{vin} [get]
 func RetrieveVehicle(c *gin.Context) {
 	vin := c.Param("vin")
 	retrievedVehicle := vehicle.Vehicle{}
