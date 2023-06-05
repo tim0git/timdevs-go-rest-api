@@ -43,7 +43,7 @@ To run this application locally, follow these steps:
     ```
 2. Access the API at http://localhost:8443/
 
-# Table commands
+## Table commands
 
 To start the DynamoDB container, use the following command:
 
@@ -63,7 +63,7 @@ To create the Vehicles table in DynamoDB, use the following command:
 make create_table
 ```
 
-# Testing commands
+## Testing commands
 
 To run tests, use the following command:
 
@@ -95,7 +95,7 @@ To run Newman tests using the Postman collection, use the following command:
 make newman
 ```
 
-# Go binary commands
+## Go binary commands
 
 To run the application locally in development mode, use the following command:
 
@@ -115,7 +115,7 @@ To run the Go binary, use the following command:
 make run
 ```
 
-# Docker commands
+## Docker commands
 
 To package the application in a Docker image, use the following command:
 
@@ -153,7 +153,7 @@ To clean up the environment and remove all generated files and containers, use t
 make clean
 ```
 
-# Documentation commands
+## Documentation commands
 
 To generate Swagger documentation, use the following command:
 
