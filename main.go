@@ -17,6 +17,15 @@ import (
 
 var port = os.Getenv("PORT")
 
+// @title Vehicle API
+// @description This is the eVe API for vehicle management
+// @version 1
+// @host localhost:8443
+// @BasePath /
+// @schemes http
+// @produce json
+// @consumes json
+
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()

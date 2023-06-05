@@ -1,8 +1,19 @@
 {
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "http"
+    ],
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This is the eVe API for vehicle management",
+        "title": "Vehicle API",
+        "contact": {},
+        "version": "1"
     },
+    "host": "localhost:8443",
+    "basePath": "/",
     "paths": {
         "/health": {
             "get": {

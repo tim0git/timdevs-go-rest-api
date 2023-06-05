@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   handlers.HealthStatus:
     properties:
@@ -60,8 +61,12 @@ definitions:
     - vin
     - year
     type: object
+host: localhost:8443
 info:
   contact: {}
+  description: This is the eVe API for vehicle management
+  title: Vehicle API
+  version: "1"
 paths:
   /health:
     get:
@@ -143,4 +148,8 @@ paths:
       summary: update an existing vehicle
       tags:
       - vehicle
+produces:
+- application/json
+schemes:
+- http
 swagger: "2.0"
