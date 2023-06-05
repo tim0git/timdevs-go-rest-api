@@ -1,11 +1,11 @@
-package handlers
+package health
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type HealthStatus struct {
+type Status struct {
 	Status string `json:"status"`
 }
 
@@ -16,8 +16,8 @@ type HealthStatus struct {
 // @Tags health
 // @Accept json
 // @Produce json
-// @Success 200 {object} HealthStatus
+// @Success 200 {object} Status
 // @Router /health [get]
 func Health(c *gin.Context) {
-	c.JSON(http.StatusOK, HealthStatus{Status: "OK"})
+	c.JSON(http.StatusOK, Status{Status: "OK"})
 }

@@ -32,7 +32,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.HealthStatus"
+                            "$ref": "#/definitions/health.Status"
                         }
                     }
                 }
@@ -139,7 +139,7 @@
         }
     },
     "definitions": {
-        "handlers.HealthStatus": {
+        "health.Status": {
             "type": "object",
             "properties": {
                 "status": {

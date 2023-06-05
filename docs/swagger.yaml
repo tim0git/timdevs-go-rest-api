@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  handlers.HealthStatus:
+  health.Status:
     properties:
       status:
         type: string
@@ -79,7 +79,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.HealthStatus'
+            $ref: '#/definitions/health.Status'
       summary: health check endpoint
       tags:
       - health

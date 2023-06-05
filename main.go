@@ -13,6 +13,7 @@ import (
 	"syscall"
 	_ "timdevs.rest.api.com/m/v2/docs"
 	"timdevs.rest.api.com/m/v2/handlers"
+	"timdevs.rest.api.com/m/v2/health"
 	"time"
 )
 
@@ -33,7 +34,7 @@ func main() {
 
 	router := gin.Default()
 	router.Use(gzip.Gzip(gzip.BestSpeed))
-	router.GET("/health", handlers.Health)
+	router.GET("/health", health.Health)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.POST("/vehicle", handlers.RegisterVehicle)
 	router.GET("/vehicle/:vin", handlers.RetrieveVehicle)

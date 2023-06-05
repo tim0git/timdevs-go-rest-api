@@ -36,7 +36,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.HealthStatus"
+                            "$ref": "#/definitions/health.Status"
                         }
                     }
                 }
@@ -143,7 +143,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handlers.HealthStatus": {
+        "health.Status": {
             "type": "object",
             "properties": {
                 "status": {

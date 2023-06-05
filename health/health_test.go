@@ -1,4 +1,4 @@
-package handlers_test
+package health_test
 
 import (
 	"encoding/json"
@@ -6,11 +6,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"timdevs.rest.api.com/m/v2/health"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-
-	"timdevs.rest.api.com/m/v2/handlers"
 )
 
 func setUpRouter() *gin.Engine {
@@ -21,7 +20,7 @@ func TestReturns200StatusCode(t *testing.T) {
 	t.Parallel()
 
 	r := setUpRouter()
-	r.GET("/health", handlers.Health)
+	r.GET("/health", health.Health)
 
 	req, err := http.NewRequest("GET", "/health", nil)
 	assert.NoError(t, err)
@@ -34,11 +33,11 @@ func TestReturns200StatusCode(t *testing.T) {
 func TestReturnsStatusOK(t *testing.T) {
 	t.Parallel()
 
-	expected := handlers.HealthStatus{Status: "OK"}
+	expected := health.Status{Status: "OK"}
 	expectedJSON, _ := json.Marshal(expected)
 
 	r := setUpRouter()
-	r.GET("/health", handlers.Health)
+	r.GET("/health", health.Health)
 
 	req, err := http.NewRequest("GET", "/health", nil)
 	assert.NoError(t, err)
