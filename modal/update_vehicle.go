@@ -2,9 +2,10 @@ package modal
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"os"
 	"timdevs.rest.api.com/m/v2/database"
 	"timdevs.rest.api.com/m/v2/vehicle"
 )
@@ -19,13 +20,21 @@ func UpdateVehicle(vehicle vehicle.Update, vin string) (*dynamodb.UpdateItemOutp
 				S: aws.String(vin),
 			},
 		},
+		ConditionExpression:       aws.String("attribute_exists(vin)"),
+		UpdateExpression:          aws.String(getUpdateExpression()),
+		ExpressionAttributeValues: getExpressionAttributeValues(vehicle),
+		ExpressionAttributeNames:  getExpressionAttributeNames(),
 	}
 
-	updateRequest.ConditionExpression = aws.String(`attribute_exists(vin)`)
+	return client.UpdateItem(updateRequest)
+}
 
-	updateRequest.UpdateExpression = aws.String("set #manufacturer = :manufacturer, #model = :model, #year = :year, #color = :color, #batteryCapacity = :batteryCapacity")
+func getUpdateExpression() string {
+	return "set #manufacturer = :manufacturer, #model = :model, #year = :year, #color = :color, #batteryCapacity = :batteryCapacity"
+}
 
-	updateRequest.ExpressionAttributeValues = map[string]*dynamodb.AttributeValue{
+func getExpressionAttributeValues(vehicle vehicle.Update) map[string]*dynamodb.AttributeValue {
+	expressionAttributeValues := map[string]*dynamodb.AttributeValue{
 		":manufacturer": {
 			S: aws.String(vehicle.Manufacturer),
 		},
@@ -49,14 +58,16 @@ func UpdateVehicle(vehicle vehicle.Update, vin string) (*dynamodb.UpdateItemOutp
 			},
 		},
 	}
+	return expressionAttributeValues
+}
 
-	updateRequest.ExpressionAttributeNames = map[string]*string{
+func getExpressionAttributeNames() map[string]*string {
+	expressionAttributeNames := map[string]*string{
 		"#model":           aws.String("model"),
 		"#year":            aws.String("year"),
 		"#color":           aws.String("color"),
 		"#batteryCapacity": aws.String("capacity"),
 		"#manufacturer":    aws.String("manufacturer"),
 	}
-
-	return client.UpdateItem(updateRequest)
+	return expressionAttributeNames
 }
