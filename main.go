@@ -3,11 +3,14 @@ package main
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	_ "timdevs.rest.api.com/m/v2/docs"
 	"timdevs.rest.api.com/m/v2/handlers"
 	"time"
 )
@@ -20,6 +23,7 @@ func main() {
 
 	router := gin.Default()
 	router.GET("/health", handlers.Health)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.POST("/vehicle", handlers.RegisterVehicle)
 	router.GET("/vehicle/:vin", handlers.RetrieveVehicle)
 	router.PATCH("/vehicle/:vin", handlers.UpdateVehicle)
