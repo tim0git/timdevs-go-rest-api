@@ -8,6 +8,17 @@ import (
 	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
+// UpdateVehicle godoc
+// @Summary update an existing vehicle
+// @Schemes
+// @Description update an existing vehicle
+// @Tags vehicle
+// @Accept json
+// @Produce json
+// @Param vin path string true "Vehicle identification number"
+// @Param request body vehicle.Update true "Vehicle information"
+// @Success 200
+// @Router /vehicle/{vin} [patch]
 func UpdateVehicle(c *gin.Context) {
 	vin := c.Param("vin")
 	vehicleUpdate := vehicle.Update{}
