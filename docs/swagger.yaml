@@ -1,0 +1,146 @@
+definitions:
+  handlers.HealthStatus:
+    properties:
+      status:
+        type: string
+    type: object
+  vehicle.Capacity:
+    properties:
+      unit:
+        type: string
+      value:
+        type: integer
+    required:
+    - unit
+    - value
+    type: object
+  vehicle.Update:
+    properties:
+      capacity:
+        $ref: '#/definitions/vehicle.Capacity'
+      color:
+        type: string
+      license_plate:
+        type: string
+      manufacturer:
+        type: string
+      model:
+        type: string
+      year:
+        type: integer
+    required:
+    - capacity
+    - color
+    - license_plate
+    - manufacturer
+    - model
+    - year
+    type: object
+  vehicle.Vehicle:
+    properties:
+      capacity:
+        $ref: '#/definitions/vehicle.Capacity'
+      color:
+        type: string
+      license_plate:
+        type: string
+      manufacturer:
+        type: string
+      model:
+        type: string
+      vin:
+        type: string
+      year:
+        type: integer
+    required:
+    - capacity
+    - color
+    - manufacturer
+    - model
+    - vin
+    - year
+    type: object
+info:
+  contact: {}
+paths:
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: returns the status of the service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.HealthStatus'
+      summary: health check endpoint
+      tags:
+      - health
+  /vehicle:
+    post:
+      consumes:
+      - application/json
+      description: register a new vehicle
+      parameters:
+      - description: Vehicle information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/vehicle.Vehicle'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: register a new vehicle
+      tags:
+      - vehicle
+  /vehicle/{vin}:
+    get:
+      consumes:
+      - application/json
+      description: retrieve a vehicle
+      parameters:
+      - description: Vehicle identification number
+        in: path
+        name: vin
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vehicle.Vehicle'
+      summary: retrieve a vehicle
+      tags:
+      - vehicle
+    patch:
+      consumes:
+      - application/json
+      description: update an existing vehicle
+      parameters:
+      - description: Vehicle identification number
+        in: path
+        name: vin
+        required: true
+        type: string
+      - description: Vehicle information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/vehicle.Update'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: update an existing vehicle
+      tags:
+      - vehicle
+swagger: "2.0"
