@@ -21,6 +21,9 @@ coverage: start_db
 integration: compose_up
 	make newman ; make compose_down ; make clean
 
+newman:
+	docker run --rm --network host -t postman/newman run https://api.postman.com/collections/12717734-83accfac-9b69-47e1-8cd8-59e7179da108?access_key=${POSTMAN_COLLECTION_API_KEY}
+
 #Go binary commands
 dev:
 	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" go run main.go
@@ -32,7 +35,7 @@ run:
 	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" ./build
 
 #Docker commands
-package:
+package: generate_swagger_docs
 	docker build -t vehicles-api -f Dockerfile .
 
 run_package:
@@ -50,5 +53,6 @@ compose_down:
 clean:
 	rm -rf build ; docker rm -f dynamodb ; docker rmi timdevs-go-rest-api-vehicle-api:latest ; docker rmi vehicles-api:latest ; docker-compose down ; docker image prune -f ; docker builder prune -f;
 
-newman:
-	docker run --rm --network host -t postman/newman run https://api.postman.com/collections/12717734-83accfac-9b69-47e1-8cd8-59e7179da108?access_key=${POSTMAN_COLLECTION_API_KEY}
+#Documentation commands
+generate_swagger_docs:
+	swag init
