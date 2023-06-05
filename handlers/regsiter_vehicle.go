@@ -9,6 +9,16 @@ import (
 	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
+// RegisterVehicle godoc
+// @Summary register a new vehicle
+// @Schemes
+// @Description register a new vehicle
+// @Tags vehicle
+// @Accept json
+// @Produce json
+// @Param request body vehicle.Vehicle true "Vehicle information"
+// @Success 201
+// @Router /vehicle [post]
 func RegisterVehicle(c *gin.Context) {
 	newVehicle := vehicle.Vehicle{}
 
