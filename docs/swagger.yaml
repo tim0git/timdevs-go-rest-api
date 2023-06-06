@@ -15,6 +15,15 @@ definitions:
     - unit
     - value
     type: object
+  vehicle.ChargingStatus:
+    properties:
+      charging:
+        type: boolean
+      location_code:
+        type: string
+      unit_id:
+        type: string
+    type: object
   vehicle.Update:
     properties:
       capacity:
@@ -41,6 +50,8 @@ definitions:
     properties:
       capacity:
         $ref: '#/definitions/vehicle.Capacity'
+      charging_status:
+        $ref: '#/definitions/vehicle.ChargingStatus'
       color:
         type: string
       license_plate:

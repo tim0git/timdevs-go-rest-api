@@ -35,7 +35,7 @@ run:
 	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" ./build
 
 #Docker commands
-package: generate_swagger_docs
+package:
 	docker build -t vehicles-api -f Dockerfile .
 
 run_package:

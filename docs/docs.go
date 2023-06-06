@@ -166,6 +166,20 @@ const docTemplate = `{
                 }
             }
         },
+        "vehicle.ChargingStatus": {
+            "type": "object",
+            "properties": {
+                "charging": {
+                    "type": "boolean"
+                },
+                "location_code": {
+                    "type": "string"
+                },
+                "unit_id": {
+                    "type": "string"
+                }
+            }
+        },
         "vehicle.Update": {
             "type": "object",
             "required": [
@@ -210,6 +224,9 @@ const docTemplate = `{
             "properties": {
                 "capacity": {
                     "$ref": "#/definitions/vehicle.Capacity"
+                },
+                "charging_status": {
+                    "$ref": "#/definitions/vehicle.ChargingStatus"
                 },
                 "color": {
                     "type": "string"
