@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  health.Status:
+  handler_health.Status:
     properties:
       status:
         type: string
@@ -79,7 +79,7 @@ info:
   title: Vehicle API
   version: "1"
 paths:
-  /health:
+  /handler_health:
     get:
       consumes:
       - application/json
@@ -90,10 +90,10 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/health.Status'
-      summary: health check endpoint
+            $ref: '#/definitions/handler_health.Status'
+      summary: handler_health check endpoint
       tags:
-      - health
+      - handler_health
   /vehicle:
     post:
       consumes:

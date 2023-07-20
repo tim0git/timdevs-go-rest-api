@@ -19,7 +19,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/health": {
+        "/handler_health": {
             "get": {
                 "description": "returns the status of the service",
                 "consumes": [
@@ -29,14 +29,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "health"
+                    "handler_health"
                 ],
-                "summary": "health check endpoint",
+                "summary": "handler_health check endpoint",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/health.Status"
+                            "$ref": "#/definitions/handler_health.Status"
                         }
                     }
                 }
@@ -143,7 +143,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "health.Status": {
+        "handler_health.Status": {
             "type": "object",
             "properties": {
                 "status": {

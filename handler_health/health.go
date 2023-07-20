@@ -1,4 +1,4 @@
-package health
+package handler_health
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,14 +10,14 @@ type Status struct {
 }
 
 // Health godoc
-// @Summary health check endpoint
+// @Summary handler_health check endpoint
 // @Schemes
 // @Description returns the status of the service
-// @Tags health
+// @Tags handler_health
 // @Accept json
 // @Produce json
 // @Success 200 {object} Status
-// @Router /health [get]
+// @Router /handler_health [get]
 func Health(c *gin.Context) {
 	c.JSON(http.StatusOK, Status{Status: "OK"})
 }
