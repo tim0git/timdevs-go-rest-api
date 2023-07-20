@@ -1,4 +1,4 @@
-package handlers_test
+package handler_register_vehicle_test
 
 import (
 	"bytes"
@@ -14,7 +14,7 @@ import (
 	"os"
 	"testing"
 	"timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/handlers"
+	"timdevs.rest.api.com/m/v2/handler_register_vehicle"
 	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
@@ -95,14 +95,14 @@ func TestMain(m *testing.M) {
 
 	os.Exit(exitCode)
 }
-func setupRegisterVehicleRouter() *gin.Engine {
+func setupRouter() *gin.Engine {
 	router := gin.Default()
-	router.POST("/vehicle", handlers.RegisterVehicle)
+	router.POST("/vehicle", handler_register_vehicle.RegisterVehicle)
 	return router
 }
 func TestReturns201StatusCodeWhenAllFieldsArePresent(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	request, err := json.Marshal(&mockVehicle)
 	assert.NoError(t, err)
@@ -117,7 +117,7 @@ func TestReturns201StatusCodeWhenAllFieldsArePresent(t *testing.T) {
 }
 func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	mockVehicleMissingLicensePlate := vehicle.Vehicle{
 		Vin:          fmt.Sprintf(random.UniqueId()),
@@ -140,7 +140,7 @@ func TestReturns201StatusCodeWhenLicensePlateIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -173,7 +173,7 @@ func TestReturnsValidationErrorWhenVinIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -205,7 +205,7 @@ func TestReturnsValidationErrorWhenManufacturerIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -237,7 +237,7 @@ func TestReturnsValidationErrorWhenModelIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -269,7 +269,7 @@ func TestReturnsValidationErrorWhenYearIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -301,7 +301,7 @@ func TestReturnsValidationErrorWhenColorIsMissing(t *testing.T) {
 }
 func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	validationError := gin.H{
 		"error":   "VALIDATEERR-1",
@@ -333,7 +333,7 @@ func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 }
 func TestReturnsDynamoDBErrorWhenAVehicleAlreadyExists(t *testing.T) {
 	t.Parallel()
-	router := setupRegisterVehicleRouter()
+	router := setupRouter()
 
 	mockVehicleAlreadyExists := vehicle.Vehicle{
 		Vin:          "GB000000000",
