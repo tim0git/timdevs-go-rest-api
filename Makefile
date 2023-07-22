@@ -1,6 +1,6 @@
 #Table commands
 start_db:
-	docker run --detach --name dynamodb -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -inMemory
+	docker run --detach --name dynamodb -p 8000:8000 amazon/dynamodb-local:1.22.0 -jar DynamoDBLocal.jar -sharedDb -inMemory
 
 delete_db:
 	docker rm -f dynamodb
@@ -26,13 +26,13 @@ newman:
 
 #Go binary commands
 dev:
-	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" go run main.go
+	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="fakeKey" AWS_SECRET_ACCESS_KEY="fakeSecretAccessKey" DYNAMODB_ENDPOINT="http://localhost:8000" go run main.go
 
 build:
 	go build -ldflags="-w -s" -o build
 
 run:
-	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="mock-key" AWS_SECRET_ACCESS_KEY="mock-secret" DYNAMODB_ENDPOINT="http://localhost:8000" ./build
+	PORT="8443" TABLE_NAME="Vehicles" AWS_ACCESS_KEY_ID="fakeKey" AWS_SECRET_ACCESS_KEY="fakeSecretAccessKey" DYNAMODB_ENDPOINT="http://localhost:8000" ./build
 
 #Docker commands
 package:
