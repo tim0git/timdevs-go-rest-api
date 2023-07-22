@@ -28,7 +28,7 @@ jobs:
       - name: Start Database
         run: make start_db
       - name: Test with Go
-        run: go test ./... -json > TestResults-${{ matrix.go-version }}.json
+        run: go test ./... --tags=docker -json > TestResults-${{ matrix.go-version }}.json
       - name: Delete Database
         run: make delete_db
       - name: Upload Go test results
