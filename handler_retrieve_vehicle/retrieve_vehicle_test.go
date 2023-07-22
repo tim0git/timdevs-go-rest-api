@@ -15,6 +15,9 @@ import (
 	"timdevs.rest.api.com/m/v2/handler_retrieve_vehicle"
 )
 
+var vinThatDoesNotExist = "GB99999999"
+var vinThatDoesExist = "GB000000000"
+
 func TestMain(m *testing.M) {
 	tableName := fmt.Sprintf("Vehicles-%v", random.UniqueId())
 
@@ -53,7 +56,7 @@ func TestMain(m *testing.M) {
 		TableName: aws.String(tableName),
 		Item: map[string]*dynamodb.AttributeValue{
 			"vin": {
-				S: aws.String("GB000000000"),
+				S: aws.String(vinThatDoesExist),
 			},
 		},
 	})
@@ -88,7 +91,7 @@ func TestReturns200StatusCodeWhenVehicleIsFound(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
-	req, requestError := http.NewRequest("GET", "/vehicle/GB000000000", nil)
+	req, requestError := http.NewRequest("GET", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), nil)
 	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
@@ -100,7 +103,7 @@ func TestReturns404StatusCodeWhenVehicleIdIsNotFound(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
-	req, requestError := http.NewRequest("GET", "/vehicle/NotARealVin", nil)
+	req, requestError := http.NewRequest("GET", fmt.Sprintf("/vehicle/%s", vinThatDoesNotExist), nil)
 	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()

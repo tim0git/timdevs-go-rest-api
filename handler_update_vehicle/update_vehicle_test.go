@@ -29,6 +29,8 @@ var mockUpdateVehicle = vehicle.Update{
 	},
 	LicensePlate: "ABC123",
 }
+var vinThatDoesNotExist = "GB99999999"
+var vinThatDoesExist = "GB000000000"
 
 func TestMain(m *testing.M) {
 	tableName := fmt.Sprintf("Vehicles-%v", random.UniqueId())
@@ -68,7 +70,7 @@ func TestMain(m *testing.M) {
 		TableName: aws.String(tableName),
 		Item: map[string]*dynamodb.AttributeValue{
 			"vin": {
-				S: aws.String("GB000000000"),
+				S: aws.String(vinThatDoesExist),
 			},
 		},
 	})
@@ -106,7 +108,7 @@ func TestReturnsStatusCode200WhenSuccessful(t *testing.T) {
 	request, err := json.Marshal(&mockUpdateVehicle)
 	assert.NoError(t, err)
 
-	req, requestError := http.NewRequest("PATCH", "/vehicle/GB000000000", bytes.NewBuffer(request))
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), bytes.NewBuffer(request))
 
 	fmt.Println(requestError)
 	assert.NoError(t, requestError)
@@ -139,7 +141,7 @@ func TestReturnsStatusCode400WhenVehicleVinIsNotPresentInDatabase(t *testing.T) 
 	request, err := json.Marshal(&mockUpdateVehicle)
 	assert.NoError(t, err)
 
-	req, requestError := http.NewRequest("PATCH", "/vehicle/GB000000001", bytes.NewBuffer(request))
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesNotExist), bytes.NewBuffer(request))
 	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
@@ -158,7 +160,7 @@ func TestReturnsStatusCode400WhenVehicleColorIsNotDefined(t *testing.T) {
 	request, err := json.Marshal(&badMockVehicle)
 	assert.NoError(t, err)
 
-	req, requestError := http.NewRequest("PATCH", "/vehicle/GB000000000", bytes.NewBuffer(request))
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), bytes.NewBuffer(request))
 	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
@@ -177,7 +179,7 @@ func TestReturnsStatusCode400WhenVehicleCapacityIsNotDefined(t *testing.T) {
 	request, err := json.Marshal(&badMockVehicle)
 	assert.NoError(t, err)
 
-	req, requestError := http.NewRequest("PATCH", "/vehicle/GB000000000", bytes.NewBuffer(request))
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), bytes.NewBuffer(request))
 	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
@@ -196,7 +198,7 @@ func TestReturnsStatusCode400WhenVehicleCapacityValueIsNotDefined(t *testing.T) 
 	request, err := json.Marshal(&badMockVehicle)
 	assert.NoError(t, err)
 
-	req, requestError := http.NewRequest("PATCH", "/vehicle/GB000000000", bytes.NewBuffer(request))
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), bytes.NewBuffer(request))
 	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()
@@ -215,7 +217,64 @@ func TestReturnsStatusCode400WhenVehicleCapacityUnitIsNotDefined(t *testing.T) {
 	request, err := json.Marshal(&badMockVehicle)
 	assert.NoError(t, err)
 
-	req, requestError := http.NewRequest("PATCH", "/vehicle/GB000000000", bytes.NewBuffer(request))
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+func TestReturnsStatusCode400WhenVehicleManufacturerIsNotDefined(t *testing.T) {
+	t.Parallel()
+
+	router := setupRouter()
+
+	badMockVehicle := mockUpdateVehicle
+	badMockVehicle.Manufacturer = ""
+
+	request, err := json.Marshal(&badMockVehicle)
+	assert.NoError(t, err)
+
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+func TestReturnsStatusCode400WhenVehicleModelIsNotDefined(t *testing.T) {
+	t.Parallel()
+
+	router := setupRouter()
+
+	badMockVehicle := mockUpdateVehicle
+	badMockVehicle.Model = ""
+
+	request, err := json.Marshal(&badMockVehicle)
+	assert.NoError(t, err)
+
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), bytes.NewBuffer(request))
+	assert.NoError(t, requestError)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+func TestReturnsStatusCode400WhenVehicleModelYearIsNotDefined(t *testing.T) {
+	t.Parallel()
+
+	router := setupRouter()
+
+	badMockVehicle := mockUpdateVehicle
+	badMockVehicle.Year = 0
+
+	request, err := json.Marshal(&badMockVehicle)
+	assert.NoError(t, err)
+
+	req, requestError := http.NewRequest("PATCH", fmt.Sprintf("/vehicle/%s", vinThatDoesExist), bytes.NewBuffer(request))
 	assert.NoError(t, requestError)
 
 	w := httptest.NewRecorder()

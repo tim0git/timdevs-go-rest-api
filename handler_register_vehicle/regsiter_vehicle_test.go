@@ -18,8 +18,10 @@ import (
 	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
+var vinThatDoesExist = "GB000000000"
+var vinThatDoesNotExist = "GB99999999"
 var mockVehicle = vehicle.Vehicle{
-	Vin:          "GB29HP0K456785",
+	Vin:          vinThatDoesNotExist,
 	Manufacturer: "Tesla",
 	Model:        "Model 3",
 	Year:         2020,
@@ -69,7 +71,7 @@ func TestMain(m *testing.M) {
 		TableName: aws.String(tableName),
 		Item: map[string]*dynamodb.AttributeValue{
 			"vin": {
-				S: aws.String("GB000000000"),
+				S: aws.String(vinThatDoesExist),
 			},
 		},
 	})
@@ -336,7 +338,7 @@ func TestReturnsStatusCode400WhenAVehicleAlreadyExists(t *testing.T) {
 	router := setupRouter()
 
 	mockVehicleAlreadyExists := vehicle.Vehicle{
-		Vin:          "GB000000000",
+		Vin:          vinThatDoesExist,
 		Manufacturer: mockVehicle.Manufacturer,
 		Model:        mockVehicle.Model,
 		Year:         mockVehicle.Year,
