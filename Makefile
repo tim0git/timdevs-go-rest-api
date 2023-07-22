@@ -10,10 +10,10 @@ create_table:
 
 #Testing commands
 test: start_db
-	go test -count=1 ./... ; make delete_db
+	go test -count=1 --tags=docker ./... ; make delete_db
 
 debug: start_db
-	go test -count=1 ./... -v ; make delete_db
+	go test -count=1 --tags=docker ./... -v ; make delete_db
 
 coverage: start_db
 	go test -coverprofile=coverage.out ./... ; go tool cover -html=coverage.out ; make delete_db
