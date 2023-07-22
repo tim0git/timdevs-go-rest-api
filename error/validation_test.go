@@ -2,12 +2,12 @@ package error_test
 
 import (
 	"errors"
+	"eve.vehicle.api.com/m/v2/error"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"timdevs.rest.api.com/m/v2/error"
 )
 
 func TestValidationErrorReturnsValidationError(t *testing.T) {

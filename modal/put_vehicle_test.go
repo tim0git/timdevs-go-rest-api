@@ -1,6 +1,8 @@
 package modal_test
 
 import (
+	"eve.vehicle.api.com/m/v2/database"
+	"eve.vehicle.api.com/m/v2/modal"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -8,8 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
-	"timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/modal"
 )
 
 func TestMain(m *testing.M) {

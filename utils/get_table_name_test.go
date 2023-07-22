@@ -1,10 +1,10 @@
 package utils_test
 
 import (
+	"eve.vehicle.api.com/m/v2/utils"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
-	"timdevs.rest.api.com/m/v2/utils"
 )
 
 func TestGetTableName(t *testing.T) {

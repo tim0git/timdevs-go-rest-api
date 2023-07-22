@@ -1,12 +1,12 @@
 package modal
 
 import (
+	"eve.vehicle.api.com/m/v2/database"
+	"eve.vehicle.api.com/m/v2/utils"
+	"eve.vehicle.api.com/m/v2/vehicle"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/utils"
-	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
 func UpdateVehicle(vehicle vehicle.Update, vin string) (*dynamodb.UpdateItemOutput, error) {

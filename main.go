@@ -2,6 +2,11 @@ package main
 
 import (
 	"context"
+	_ "eve.vehicle.api.com/m/v2/docs"
+	"eve.vehicle.api.com/m/v2/handler_health"
+	"eve.vehicle.api.com/m/v2/handler_register_vehicle"
+	"eve.vehicle.api.com/m/v2/handler_retrieve_vehicle"
+	"eve.vehicle.api.com/m/v2/handler_update_vehicle"
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -11,11 +16,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	_ "timdevs.rest.api.com/m/v2/docs"
-	"timdevs.rest.api.com/m/v2/handler_health"
-	"timdevs.rest.api.com/m/v2/handler_register_vehicle"
-	"timdevs.rest.api.com/m/v2/handler_retrieve_vehicle"
-	"timdevs.rest.api.com/m/v2/handler_update_vehicle"
 	"time"
 )
 

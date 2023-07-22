@@ -2,6 +2,9 @@ package handler_register_vehicle_test
 
 import (
 	"bytes"
+	"eve.vehicle.api.com/m/v2/database"
+	"eve.vehicle.api.com/m/v2/handler_register_vehicle"
+	"eve.vehicle.api.com/m/v2/vehicle"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -13,9 +16,6 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
-	"timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/handler_register_vehicle"
-	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
 var vinThatDoesExist = "GB000000000"

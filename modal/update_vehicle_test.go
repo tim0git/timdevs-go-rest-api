@@ -1,10 +1,10 @@
 package modal_test
 
 import (
+	"eve.vehicle.api.com/m/v2/modal"
+	"eve.vehicle.api.com/m/v2/vehicle"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"timdevs.rest.api.com/m/v2/modal"
-	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
 func TestUpdateVehicle(t *testing.T) {

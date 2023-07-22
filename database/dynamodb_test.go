@@ -1,10 +1,10 @@
 package database_test
 
 import (
+	"eve.vehicle.api.com/m/v2/database"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
-	"timdevs.rest.api.com/m/v2/database"
 )
 
 var mockRegion string = "us-east-1"

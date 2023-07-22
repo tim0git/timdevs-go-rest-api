@@ -1,10 +1,10 @@
 package modal
 
 import (
+	"eve.vehicle.api.com/m/v2/database"
+	"eve.vehicle.api.com/m/v2/utils"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/utils"
 )
 
 func PutVehicle(item map[string]*dynamodb.AttributeValue) (*dynamodb.PutItemOutput, error) {

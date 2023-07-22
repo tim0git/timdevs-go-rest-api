@@ -1,6 +1,8 @@
 package handler_retrieve_vehicle_test
 
 import (
+	"eve.vehicle.api.com/m/v2/database"
+	"eve.vehicle.api.com/m/v2/handler_retrieve_vehicle"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -11,8 +13,6 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
-	"timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/handler_retrieve_vehicle"
 )
 
 var vinThatDoesNotExist = "GB99999999"

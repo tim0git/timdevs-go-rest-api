@@ -1,11 +1,11 @@
 package handler_update_vehicle
 
 import (
+	"eve.vehicle.api.com/m/v2/error"
+	"eve.vehicle.api.com/m/v2/modal"
+	"eve.vehicle.api.com/m/v2/vehicle"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"timdevs.rest.api.com/m/v2/error"
-	"timdevs.rest.api.com/m/v2/modal"
-	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
 // UpdateVehicle godoc

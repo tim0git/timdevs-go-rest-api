@@ -2,6 +2,7 @@ package error_test
 
 import (
 	"errors"
+	"eve.vehicle.api.com/m/v2/error"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/gin-gonic/gin"
@@ -9,7 +10,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"timdevs.rest.api.com/m/v2/error"
 )
 
 func TestReturnsStatusCode500AsDefaultResponse(t *testing.T) {

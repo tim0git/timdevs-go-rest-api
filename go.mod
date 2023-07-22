@@ -1,4 +1,4 @@
-module timdevs.rest.api.com/m/v2
+module eve.vehicle.api.com/m/v2
 
 go 1.20
 

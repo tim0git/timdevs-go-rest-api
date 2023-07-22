@@ -3,6 +3,9 @@ package handler_update_vehicle_test
 import (
 	"bytes"
 	"encoding/json"
+	"eve.vehicle.api.com/m/v2/database"
+	"eve.vehicle.api.com/m/v2/handler_update_vehicle"
+	"eve.vehicle.api.com/m/v2/vehicle"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -13,9 +16,6 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
-	"timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/handler_update_vehicle"
-	"timdevs.rest.api.com/m/v2/vehicle"
 )
 
 var mockUpdateVehicle = vehicle.Update{

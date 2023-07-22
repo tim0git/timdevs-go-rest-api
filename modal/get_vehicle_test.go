@@ -1,9 +1,9 @@
 package modal_test
 
 import (
+	"eve.vehicle.api.com/m/v2/modal"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"timdevs.rest.api.com/m/v2/modal"
 )
 
 func TestGetsVehicleWithoutError(t *testing.T) {

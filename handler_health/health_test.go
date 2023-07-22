@@ -2,11 +2,11 @@ package handler_health_test
 
 import (
 	"encoding/json"
+	"eve.vehicle.api.com/m/v2/handler_health"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"timdevs.rest.api.com/m/v2/handler_health"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
