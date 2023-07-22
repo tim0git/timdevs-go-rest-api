@@ -348,7 +348,7 @@ func TestReturnsStatusCode400WhenAVehicleAlreadyExists(t *testing.T) {
 
 	dynamoError := gin.H{
 		"error":   "DYNAMOERR-1",
-		"message": "ConditionalCheckFailedException: The conditional request failed",
+		"message": "ConditionalCheckFailedException",
 	}
 	expected, err := json.Marshal(&dynamoError)
 	assert.NoError(t, err)
