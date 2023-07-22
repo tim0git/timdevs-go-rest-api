@@ -331,7 +331,7 @@ func TestReturnsValidationErrorWhenCapacityIsMissing(t *testing.T) {
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
-func TestReturnsDynamoDBErrorWhenAVehicleAlreadyExists(t *testing.T) {
+func TestReturnsStatusCode400WhenAVehicleAlreadyExists(t *testing.T) {
 	t.Parallel()
 	router := setupRouter()
 
@@ -359,6 +359,6 @@ func TestReturnsDynamoDBErrorWhenAVehicleAlreadyExists(t *testing.T) {
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, string(expected), w.Body.String())
 }
