@@ -14,7 +14,8 @@ import (
 	_ "timdevs.rest.api.com/m/v2/docs"
 	"timdevs.rest.api.com/m/v2/handler_health"
 	"timdevs.rest.api.com/m/v2/handler_register_vehicle"
-	"timdevs.rest.api.com/m/v2/handlers"
+	"timdevs.rest.api.com/m/v2/handler_retrieve_vehicle"
+	"timdevs.rest.api.com/m/v2/handler_update_vehicle"
 	"time"
 )
 
@@ -38,8 +39,8 @@ func main() {
 	router.GET("/handler_health", handler_health.Health)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.POST("/vehicle", handler_register_vehicle.RegisterVehicle)
-	router.GET("/vehicle/:vin", handlers.RetrieveVehicle)
-	router.PATCH("/vehicle/:vin", handlers.UpdateVehicle)
+	router.GET("/vehicle/:vin", handler_retrieve_vehicle.RetrieveVehicle)
+	router.PATCH("/vehicle/:vin", handler_update_vehicle.UpdateVehicle)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
