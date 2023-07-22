@@ -45,8 +45,9 @@ func DynamoDBError(c *gin.Context, err error) {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": dynamoDBError, "message": "InternalServerError"})
 			break
 		}
-	} else {
-		log.Println(err.Error())
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": dynamoDBError, "message": err.Error()})
+		return
 	}
+
+	log.Println(err.Error())
+	c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": dynamoDBError, "message": err.Error()})
 }
