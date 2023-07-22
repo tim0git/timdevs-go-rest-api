@@ -36,7 +36,7 @@ func main() {
 
 	router := gin.Default()
 	router.Use(gzip.Gzip(gzip.BestSpeed))
-	router.GET("/handler_health", handler_health.Health)
+	router.GET("/health", handler_health.Health)
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	router.POST("/vehicle", handler_register_vehicle.RegisterVehicle)
 	router.GET("/vehicle/:vin", handler_retrieve_vehicle.RetrieveVehicle)
