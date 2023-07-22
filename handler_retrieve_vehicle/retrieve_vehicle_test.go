@@ -1,4 +1,4 @@
-package handlers_test
+package handler_retrieve_vehicle_test
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 	"os"
 	"testing"
 	"timdevs.rest.api.com/m/v2/database"
-	"timdevs.rest.api.com/m/v2/handlers"
+	"timdevs.rest.api.com/m/v2/handler_retrieve_vehicle"
 )
 
 func TestMain(m *testing.M) {
@@ -79,15 +79,14 @@ func TestMain(m *testing.M) {
 
 	os.Exit(exitCode)
 }
-
-func setupRetrieveVehicleRouter() *gin.Engine {
+func setupRouter() *gin.Engine {
 	router := gin.Default()
-	router.GET("/vehicle/:vin", handlers.RetrieveVehicle)
+	router.GET("/vehicle/:vin", handler_retrieve_vehicle.RetrieveVehicle)
 	return router
 }
 func TestReturns200StatusCodeWhenVehicleIsFound(t *testing.T) {
 	t.Parallel()
-	router := setupRetrieveVehicleRouter()
+	router := setupRouter()
 
 	req, requestError := http.NewRequest("GET", "/vehicle/GB000000000", nil)
 	assert.NoError(t, requestError)
@@ -99,7 +98,7 @@ func TestReturns200StatusCodeWhenVehicleIsFound(t *testing.T) {
 }
 func TestReturns404StatusCodeWhenVehicleIdIsNotFound(t *testing.T) {
 	t.Parallel()
-	router := setupRetrieveVehicleRouter()
+	router := setupRouter()
 
 	req, requestError := http.NewRequest("GET", "/vehicle/NotARealVin", nil)
 	assert.NoError(t, requestError)
@@ -111,7 +110,7 @@ func TestReturns404StatusCodeWhenVehicleIdIsNotFound(t *testing.T) {
 }
 func TestReturns404StatusCodeWhenVehicleIdIsNotPassed(t *testing.T) {
 	t.Parallel()
-	router := setupRetrieveVehicleRouter()
+	router := setupRouter()
 
 	req, requestError := http.NewRequest("GET", "/vehicle/", nil)
 	assert.NoError(t, requestError)

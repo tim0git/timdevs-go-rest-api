@@ -1,4 +1,4 @@
-package handlers
+package handler_retrieve_vehicle
 
 import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
