@@ -1,7 +1,6 @@
 package handler_update_vehicle
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"timdevs.rest.api.com/m/v2/error"
@@ -22,14 +21,6 @@ import (
 // @Router /vehicle/{vin} [patch]
 func UpdateVehicle(c *gin.Context) {
 	vin := c.Param("vin")
-
-	fmt.Println("vin: ", vin)
-
-	// return 404 if vin is null
-	if vin == "" {
-		c.Status(http.StatusBadRequest)
-		return
-	}
 
 	vehicleUpdate := vehicle.Update{}
 
