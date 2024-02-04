@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: "eve"
+  name: "vehicle-api"
+spec:
+  selector:
+    matchLabels:
+      app: "eve-vehicle-api"
+  template:
+    metadata:
+      name: "eve-vehicle-api"
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: "eve-vehicle-api"
+          image: "app-image"
+          resources:
+            limits:
+              cpu: "0.25"
+              memory: "256Mi"
