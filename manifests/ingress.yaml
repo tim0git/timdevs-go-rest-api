@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: eve
+  name: vehicles-api-ingress
+spec:
+  rules:
+  - host: eve.local
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: vehicle-api
+            port:
+              number: 80
