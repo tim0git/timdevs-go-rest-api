@@ -23,5 +23,8 @@ spec:
             limits:
               cpu: "0.25"
               memory: "256Mi"
+          env:
+            - name: PORT
+              value: "3000"
           ports:
           - containerPort: 3000
