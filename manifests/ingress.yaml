@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   namespace: eve
   name: vehicles-api-ingress
+  labels:
+    app: vehicle-api
 spec:
   rules:
   - host: eve.local

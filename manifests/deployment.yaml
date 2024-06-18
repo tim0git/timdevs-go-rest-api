@@ -1,13 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: "eve"
-  name: "vehicle-api"
+  namespace: eve
+  name: vehicle-api
+  labels:
+        app: vehicle-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: "vehicle-api"
+      app: vehicle-api
   template:
     metadata:
       labels:
@@ -15,7 +17,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - name: "vehicle-api"
+        - name: vehicle-api
           image: "app-image"
           resources:
             limits:
